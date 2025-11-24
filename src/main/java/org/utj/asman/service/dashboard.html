@@ -1,0 +1,12 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Management Dashboard</title>
+</head>
+<body>
+    <h1>Welcome to the <span th:text="${appName}">App</span> Dashboard</h1>
+    <p>This is where your management reports and tools will go.</p>
+    <a th:href="@{/management/receipts/123/pdf}">Download Sample PDF Receipt</a>
+</body>
+</html>
