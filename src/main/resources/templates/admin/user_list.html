@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{admin/layout}"> <!-- Points to this layout file -->
+
+<head>
+    <title>Dashboard Page</title>
+</head>
+
+<body>
+<!-- This title injects into the layout's header -->
+<div layout:fragment="header">Dashboard Overview</div>
+
+<!-- This content injects into the layout's main content area -->
+<div layout:fragment="content">
+    <div class="card">
+        <h3>Welcome!</h3>
+        <p>This is your dashboard content.</p>
+    </div>
+</div>
+</body>
+</html>

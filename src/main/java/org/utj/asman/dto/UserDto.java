@@ -1,4 +1,4 @@
 package org.utj.asman.dto;
 
-public class AssetEntryDTO {
+public class UserDto {
 }
