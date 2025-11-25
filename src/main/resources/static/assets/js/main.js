@@ -958,7 +958,7 @@
         //------------------------------------------------------------------------------------------------------------------
         if ($('#allProductTable').length) {
             var dataTable = $('#allProductTable').DataTable({
-                scrollX: true,
+                // scrollX: true,
                 "columnDefs": [{
                     "targets": 'no-sort',
                     "orderable": false

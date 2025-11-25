@@ -780,3 +780,15 @@ a:focus-visible {
         touch-action: manipulation;
     }
 }
+
+/* DataTable Pagination Button Overrides */
+.main-content .table-bottom-control .btn.current,
+.dataTables_wrapper .dataTables_paginate .btn.current {
+    background: rgba(255, 255, 255, 0.1) !important;
+    border-color: rgba(255, 255, 255, 0.2) !important;
+    color: #c8d4f0 !important;
+}
+
+.dataTables_wrapper .dataTables_paginate .btn.current:hover {
+    background: rgba(255, 255, 255, 0.15) !important;
+}

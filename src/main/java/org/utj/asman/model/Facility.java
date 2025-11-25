@@ -1,6 +1,5 @@
 package org.utj.asman.model;
 
-
 import lombok.Data;
 import javax.persistence.*;
 
@@ -19,4 +18,8 @@ public class Facility {
     // MFL Code must be unique so we don't have duplicate hospitals
     @Column(name = "mfl_code", nullable = false, unique = true)
     private String mflCode;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "county_id")
+    private County county;
 }

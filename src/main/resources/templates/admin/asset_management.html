@@ -15,8 +15,8 @@
 
 
 <div layout:fragment="actions">
-    <a th:href="@{/admin/assets/new}" class="btn btn-sm btn-primary">
-        <i class="material-icons">add</i> Add New Asset
+    <a th:href="@{/admin/assets/new}" class="btn btn-sm btn-primary gap-2 d-flex align-items-center">
+        <i class="fa-solid fa-plus"></i> Add New Asset
     </a>
 </div>
 
@@ -46,7 +46,7 @@
                                                 </select>
                                             </div>
                                             <div class="col">
-                                                <button class="btn btn-sm btn-primary"><i class="fa-light fa-filter"></i> Filter</button>
+                                                <button class="btn btn-sm btn-primary gap-2 d-flex align-items-center justify-content-center"><i class="fa-solid fa-filter"></i> Filter</button>
                                             </div>
                                         </form>
                                     </div>
@@ -104,11 +104,11 @@
                                 <td>
                                     <div class="btn-group btn-group-sm flex-wrap gap-1">
                                         <a th:href="@{/admin/assets/edit/{id}(id=${asset.id})}" class="btn btn-sm btn-outline-primary">
-                                            <i class="fa fa-edit"></i>
+                                            <i class="fa-solid fa-pen-to-square"></i>
                                         </a>
                                         <button type="button" class="btn btn-sm btn-outline-danger" th:data-id="${asset.id}"
                                                 onclick="confirmDelete(this.getAttribute('data-id'))">
-                                            <i class="fa fa-trash"></i>
+                                            <i class="fa-solid fa-trash"></i>
                                         </button>
                                     </div>
                                 </td>

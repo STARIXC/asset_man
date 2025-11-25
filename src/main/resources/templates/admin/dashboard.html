@@ -7,19 +7,17 @@
 </head>
 <body>
 
-<div layout:fragment="header">System Overview</div>
+<div layout:fragment="header">Dashboard</div>
 
-
+<div layout:fragment="actions">
+    <div class="input-group dashboard-filter">
+        <input type="text" class="form-control" name="basic" id="dashboardFilter" readonly>
+        <label for="dashboardFilter" class="input-group-text"><i class="fa-light fa-calendar-days"></i></label>
+    </div>
+</div>
 
 <div layout:fragment="content">
     <!-- Statistics Cards -->
-    <div class="dashboard-breadcrumb mb-25">
-        <h2>Dashboard</h2>
-        <div class="input-group dashboard-filter">
-            <input type="text" class="form-control" name="basic" id="dashboardFilter" readonly>
-            <label for="dashboardFilter" class="input-group-text"><i class="fa-light fa-calendar-days"></i></label>
-        </div>
-    </div>
     <div class="row mb-25">
         <div class="col-lg-4 col-6 col-xs-12">
             <div class="dashboard-top-box dashboard-top-box-2 rounded border-0 card-bg">
@@ -69,7 +67,7 @@
     <!-- Recent Activity Table -->
     <div class="card border-0">
         <div class="card-header">
-            <i class="material-icons">history</i> Recent Activity
+            <i class="fa-solid fa-clock-rotate-left"></i> Recent Activity
         </div>
         <div class="card-body">
             <div class="table-responsive">

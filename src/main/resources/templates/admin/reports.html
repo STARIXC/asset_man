@@ -15,13 +15,13 @@
         <div class="col-12 col-md-6">
             <div class="card border-0">
                 <div class="card-header">
-                    <i class="material-icons">picture_as_pdf</i> Generate Asset Reports
+                    <i class="fa-solid fa-file-pdf"></i> Generate Asset Reports
                 </div>
                 <div class="card-body">
                     <h5 class="card-title">Full Inventory Report</h5>
                     <p class="card-text text-muted">Generate a PDF document containing a complete list of all assets in the inventory.</p>
-                    <a th:href="@{/admin/reports/generate/all}" class="btn btn-primary w-100">
-                        <i class="material-icons">download</i> Generate & Download
+                    <a th:href="@{/admin/reports/generate/all}" class="btn btn-primary w-100 gap-2 d-flex align-items-center justify-content-center">
+                        <i class="fa-solid fa-download"></i> Generate & Download
                     </a>
                 </div>
             </div>
@@ -29,7 +29,7 @@
         <div class="col-12 col-md-6">
             <div class="card border-0">
                 <div class="card-header">
-                    <i class="material-icons">domain</i> Report by Facility
+                    <i class="fa-solid fa-building"></i> Report by Facility
                 </div>
                 <div class="card-body">
                     <form th:action="@{/admin/reports/generate/facility}" method="get">
@@ -42,8 +42,8 @@
                                 </option>
                             </select>
                         </div>
-                        <button type="submit" class="btn btn-secondary w-100">
-                            <i class="material-icons">download</i> Generate for Facility
+                        <button type="submit" class="btn btn-secondary w-100 gap-2 d-flex align-items-center justify-content-center">
+                            <i class="fa-solid fa-download"></i> Generate for Facility
                         </button>
                     </form>
                 </div>

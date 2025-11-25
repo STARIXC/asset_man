@@ -9,8 +9,8 @@
     <div layout:fragment="header">Asset Inventory</div>
 
     <div layout:fragment="actions">
-        <a th:href="@{/assets/new}" class="btn btn-sm btn-primary">
-            <i class="material-icons">add</i> Add New Asset
+        <a th:href="@{/assets/new}" class="btn btn-sm btn-primary gap-2 d-flex align-items-center">
+            <i class="fa-solid fa-plus"></i> Add New Asset
         </a>
     </div>
 
@@ -20,7 +20,7 @@
             <div class="col-md-4">
                 <div class="card border-0">
                     <div class="card-header">
-                        <i class="material-icons">filter_list</i> Filter
+                        <i class="fa-solid fa-filter"></i> Filter
                     </div>
                     <div class="card-body">
                         <form id="filterForm" method="get" class="row g-3">
@@ -44,7 +44,7 @@
         <!-- Assets Table Card -->
         <div class="card border-0">
             <div class="card-header">
-                <i class="material-icons">inventory_2</i> Asset Inventory
+                <i class="fa-solid fa-boxes-stacked"></i> Asset Inventory
             </div>
             <div class="card-body">
                 <div class="table-responsive">
@@ -84,13 +84,13 @@
                                     <div class="btn-group">
                                         <a th:href="@{/assets/edit/{id}(id=${asset.id})}" 
                                            class="btn btn-sm btn-outline-primary">
-                                            <i class="material-icons">edit</i>
+                                            <i class="fa-solid fa-pen-to-square"></i>
                                         </a>
                                         <button type="button" 
                                                 class="btn btn-sm btn-outline-danger"
                                                 th:data-id="${asset.id}"
                                                 onclick="confirmDelete(this.getAttribute('data-id'))">
-                                            <i class="material-icons">delete</i>
+                                            <i class="fa-solid fa-trash"></i>
                                         </button>
                                     </div>
                                 </td>

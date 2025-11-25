@@ -1,0 +1,49 @@
+=== ADD THESE MENU ITEMS TO layout.html ===
+
+Insert these two menu items after line 125 (after the Hardware Specs </li> tag):
+
+                    <li class="sidebar-dropdown-item">
+                        <a class="sidebar-link material-sidebar-link" th:classappend="${#httpServletRequest.getRequestURI().startsWith('/admin/facilities') ? 'active' : ''}"
+                           th:href="@{/admin/facilities}">
+                            <i class="fa-solid fa-hospital"></i>
+                            <span>Facility Management</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-dropdown-item">
+                        <a class="sidebar-link material-sidebar-link" th:classappend="${#httpServletRequest.getRequestURI().startsWith('/admin/counties') ? 'active' : ''}"
+                           th:href="@{/admin/counties}">
+                            <i class="fa-solid fa-map-location-dot"></i>
+                            <span>County Management</span>
+                        </a>
+                    </li>
+
+=== LOCATION IN FILE ===
+After line 125 in layout.html, which contains:
+                    </li>
+
+And before line 126, which contains:
+                    <li class="sidebar-dropdown-item">
+
+=== COMPLETE SECTION SHOULD LOOK LIKE ===
+                    </li>
+                    <li class="sidebar-dropdown-item">
+                        <a class="sidebar-link material-sidebar-link" th:classappend="${#httpServletRequest.getRequestURI().startsWith('/admin/facilities') ? 'active' : ''}"
+                           th:href="@{/admin/facilities}">
+                            <i class="fa-solid fa-hospital"></i>
+                            <span>Facility Management</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-dropdown-item">
+                        <a class="sidebar-link material-sidebar-link" th:classappend="${#httpServletRequest.getRequestURI().startsWith('/admin/counties') ? 'active' : ''}"
+                           th:href="@{/admin/counties}">
+                            <i class="fa-solid fa-map-location-dot"></i>
+                            <span>County Management</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-dropdown-item">
+                        <a class="sidebar-link material-sidebar-link" th:classappend="${#httpServletRequest.getRequestURI().startsWith('/admin/users') ? 'active' : ''}"
+                           th:href="@{/admin/users}">
+                            <i class="fa-light fa-user-headset"></i>
+                            <span>User Management</span>
+                        </a>
+                    </li>

@@ -15,7 +15,7 @@
         <div class="col-12">
             <div class="card border-0 mb-4">
                 <div class="card-header">
-                    <i class="material-icons">memory</i> Add New CPU Specification
+                    <i class="fa-solid fa-memory"></i> Add New CPU Specification
                 </div>
                 <div class="card-body">
                     <form th:action="@{/admin/cpu-specs/save}" method="post" th:object="${newSpec}">
@@ -41,8 +41,8 @@
                                 <input type="text" class="form-control" id="hardDisk" th:field="*{hardDisk}" placeholder="e.g. 500GB SSD" required>
                             </div>
                             <div class="col-12 col-md-6 col-lg-4 d-flex align-items-end">
-                                <button type="submit" class="btn btn-primary w-100">
-                                    <i class="material-icons">add</i> Add Spec
+                                <button type="submit" class="btn btn-primary w-100 gap-2 d-flex align-items-center justify-content-center">
+                                    <i class="fa-solid fa-plus"></i> Add Spec
                                 </button>
                             </div>
                         </div>
@@ -54,7 +54,7 @@
         <div class="col-12">
             <div class="card border-0">
                 <div class="card-header">
-                    <i class="material-icons">list</i> Available Configurations
+                    <i class="fa-solid fa-list"></i> Available Configurations
                 </div>
                 <div class="card-body p-0">
                     <div class="table-responsive">
@@ -82,7 +82,7 @@
                                         <form th:action="@{/admin/cpu-specs/delete/{id}(id=${spec.id})}" method="post" class="form-display-inline">
                                             <button type="submit" class="btn btn-sm btn-outline-danger"
                                                     onclick="return confirm('Are you sure you want to delete this spec?');">
-                                                <i class="material-icons">delete</i>
+                                                <i class="fa-solid fa-trash"></i>
                                             </button>
                                         </form>
                                     </td>

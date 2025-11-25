@@ -123,6 +123,20 @@
                             <span>Hardware Specs</span>
                         </a>
                     </li>
+                       <li class="sidebar-dropdown-item">
+                        <a class="sidebar-link material-sidebar-link" th:classappend="${#httpServletRequest.getRequestURI().startsWith('/admin/facilities') ? 'active' : ''}"
+                           th:href="@{/admin/facilities}">
+                            <i class="fa-solid fa-hospital"></i>
+                            <span>Facility Management</span>
+                        </a>
+                    </li>
+                    <li class="sidebar-dropdown-item">
+                        <a class="sidebar-link material-sidebar-link" th:classappend="${#httpServletRequest.getRequestURI().startsWith('/admin/counties') ? 'active' : ''}"
+                           th:href="@{/admin/counties}">
+                            <i class="fa-solid fa-map-location-dot"></i>
+                            <span>County Management</span>
+                        </a>
+                    </li>
                     <li class="sidebar-dropdown-item">
                         <a class="sidebar-link material-sidebar-link" th:classappend="${#httpServletRequest.getRequestURI().startsWith('/admin/users') ? 'active' : ''}"
                            th:href="@{/admin/users}">

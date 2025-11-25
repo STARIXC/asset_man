@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{admin/layout}">
+
+<head>
+    <title>County Management</title>
+</head>
+
+<body>
+<div layout:fragment="header">County Management</div>
+
+<div layout:fragment="content">
+    <div class="row g-3 g-md-4">
+        <div class="col-12 col-lg-4">
+            <div class="card border-0 mb-4 mb-lg-0">
+                <div class="card-header">
+                   <span><i class="fa-solid fa-map-location-dot"></i> Add New County</span>
+                </div>
+                <div class="card-body">
+                    <form th:action="@{/admin/counties/save}" method="post" th:object="${newCounty}">
+                        <div class="mb-3">
+                            <label for="countyName" class="form-label">County Name</label>
+                            <input type="text" class="form-control" id="countyName" th:field="*{countyName}" placeholder="e.g., Nairobi" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="countyCode" class="form-label">County Code</label>
+                            <input type="text" class="form-control" id="countyCode" th:field="*{countyCode}" placeholder="e.g., 047" required>
+                            <div class="form-text">Official county code (must be unique)</div>
+                        </div>
+                        <div class="d-flex gap-2">
+                            <button type="submit" class="btn btn-primary flex-fill gap-2 d-flex align-items-center justify-content-center">
+                                <i class="fa-solid fa-floppy-disk"></i> Save County
+                            </button>
+                            <button type="button" onclick="resetCountyForm()" class="btn btn-secondary">
+                                <i class="fa-solid fa-xmark"></i>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-12 col-lg-8">
+            <div class="card border-0">
+                <div class="card-header">
+                    <span><i class="fa-solid fa-map"></i> Registered Counties</span>
+                </div>
+                <div class="card-body p-0">
+                    <div class="table-responsive">
+                        <table id="countiesTable" class="table table-hover table-sm mb-0">
+                            <thead class="table-light">
+                                <tr>
+                                    <th class="d-none d-sm-table-cell">ID</th>
+                                    <th>County Name</th>
+                                    <th class="d-none d-md-table-cell">County Code</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="county : ${counties}">
+                                    <td class="d-none d-sm-table-cell" th:text="${county.id}">1</td>
+                                    <td th:text="${county.countyName}">County Name</td>
+                                    <td class="d-none d-md-table-cell">
+                                        <span class="badge bg-primary" th:text="${county.countyCode}">047</span>
+                                    </td>
+                                    <td>
+                                        <div class="btn-box">
+                                            <button class="btn btn-sm btn-outline-primary"
+                                                    th:onclick="'editCounty(' + ${county.id} + ')'">
+                                                <i class="fa-solid fa-pen-to-square"></i>
+                                            </button>
+                                            <form th:action="@{/admin/counties/delete/{id}(id=${county.id})}" method="post" class="d-inline">
+                                                <button type="submit" class="btn btn-sm btn-outline-danger"
+                                                        onclick="return confirm('Are you sure you want to delete this county?');">
+                                                    <i class="fa-solid fa-trash"></i>
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<th:block layout:fragment="scripts">
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    const csrfToken = /*[[${_csrf.token}]]*/ '';
+    const csrfHeader = /*[[${_csrf.headerName}]]*/ '';
+
+    // Edit county
+    function editCounty(id) {
+        fetch(`/admin/counties/get/${id}`)
+            .then(response => response.json())
+            .then(county => {
+                // Populate form fields
+                document.getElementById('countyName').value = county.countyName;
+                document.getElementById('countyCode').value = county.countyCode;
+                
+                // Get the form
+                const form = document.querySelector('form');
+                
+                // Remove any existing hidden id field
+                const existingIdField = form.querySelector('input[name="id"]');
+                if (existingIdField) {
+                    existingIdField.remove();
+                }
+                
+                // Add hidden id field for update
+                const idInput = document.createElement('input');
+                idInput.type = 'hidden';
+                idInput.name = 'id';
+                idInput.value = county.id;
+                form.appendChild(idInput);
+                
+                // Change button text
+                const btn = form.querySelector('button[type="submit"]');
+                btn.innerHTML = '<i class="fa-solid fa-pen-to-square"></i> Update County';
+                btn.classList.remove('btn-primary');
+                btn.classList.add('btn-warning');
+                
+                // Scroll to form
+                document.querySelector('.card').scrollIntoView({ behavior: 'smooth' });
+            })
+            .catch(error => console.error('Error:', error));
+    }
+    
+    // Reset form to add mode
+    function resetCountyForm() {
+        const form = document.querySelector('form');
+        form.reset();
+        
+        // Remove hidden id field
+        const idField = form.querySelector('input[name="id"]');
+        if (idField) {
+            idField.remove();
+        }
+        
+        // Reset button
+        const btn = form.querySelector('button[type="submit"]');
+        btn.innerHTML = '<i class="fa-solid fa-floppy-disk"></i> Save County';
+        btn.classList.remove('btn-warning');
+        btn.classList.add('btn-primary');
+    }
+
+    // Initialize DataTable
+    $(document).ready(function() {
+        if ($('#countiesTable').length) {
+            var dataTable = $('#countiesTable').DataTable({
+                "pageLength": 10,
+                "lengthMenu": [
+                    [10, 25, 50, -1],
+                    [10, 25, 50, "All"]
+                ],
+                "language": {
+                    "search": "",
+                    "sLengthMenu": "_MENU_",
+                    "info": "Showing _START_ to _END_ of _TOTAL_ counties",
+                    "infoEmpty": "No counties available",
+                    "zeroRecords": "No matching counties found"
+                },
+                "columnDefs": [
+                    { "orderable": false, "targets": 3 } // Disable sorting on Actions column
+                ]
+            });
+
+            // Custom styling for DataTable elements to match main.js
+            $('#countiesTable_filter input').addClass('form-control').attr("placeholder", "Search...").addClass('form-control-sm');
+            $('#countiesTable_length').find('select').addClass('form-control form-control-sm px-3');
+        }
+    });
+    /*]]>*/
+</script>
+</th:block>
+</body>
+</html>
