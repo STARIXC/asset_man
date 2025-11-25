@@ -1,10 +1,169 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{admin/layout}">
 <head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
+    <title>Dashboard</title>
 </head>
 <body>
-$END$
+
+<div layout:fragment="header">System Overview</div>
+
+
+
+<div layout:fragment="content">
+    <!-- Statistics Cards -->
+    <div class="dashboard-breadcrumb mb-25">
+        <h2>Dashboard</h2>
+        <div class="input-group dashboard-filter">
+            <input type="text" class="form-control" name="basic" id="dashboardFilter" readonly>
+            <label for="dashboardFilter" class="input-group-text"><i class="fa-light fa-calendar-days"></i></label>
+        </div>
+    </div>
+    <div class="row mb-25">
+        <div class="col-lg-4 col-6 col-xs-12">
+            <div class="dashboard-top-box dashboard-top-box-2 rounded border-0 card-bg">
+                <div class="left">
+                    <p class="d-flex justify-content-between mb-2">Total Assets</p>
+                    <h3 class="fw-normal" th:text="${assetCount}">134,152</h3>
+                </div>
+                <div class="right">
+                    <div class="part-icon text-light rounded">
+                        <span><i class="fa-light fa-toolbox"></i></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4 col-6 col-xs-12">
+            <div class="dashboard-top-box dashboard-top-box-2 rounded border-0 card-bg">
+                <div class="left">
+                    <p class="d-flex justify-content-between mb-2">Facilities</p>
+                    <h3 class="fw-normal" th:text="${facilityCount}">12,412</h3>
+
+                </div>
+                <div class="right">
+                    <div class="part-icon text-light rounded">
+                        <span><i class="fa-light fa-building"></i></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-4 col-6 col-xs-12">
+            <div class="dashboard-top-box dashboard-top-box-2 rounded border-0 card-bg">
+                <div class="left">
+                    <p class="d-flex justify-content-between mb-2">Active User</p>
+                    <h3 class="fw-normal" th:text="${userCount}">$134,152</h3>
+
+                </div>
+                <div class="right">
+                    <div class="part-icon text-light rounded">
+                        <span><i class="fa-light fa-users-class"></i></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+    <!-- Recent Activity Table -->
+    <div class="card border-0">
+        <div class="card-header">
+            <i class="material-icons">history</i> Recent Activity
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-hover table-sm">
+                    <thead class="table-light">
+                        <tr>
+                            <th scope="col">Date</th>
+                            <th scope="col">User</th>
+                            <th scope="col">Action</th>
+                            <th scope="col">Details</th>
+                            <th scope="col">Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>2025-11-24</td>
+                            <td>Admin</td>
+                            <td>Asset Update</td>
+                            <td>Updated hardware specifications</td>
+                            <td><span class="badge bg-success">Completed</span></td>
+                        </tr>
+                        <tr>
+                            <td>2025-11-23</td>
+                            <td>User1</td>
+                            <td>Asset Creation</td>
+                            <td>New laptop assigned to marketing</td>
+                            <td><span class="badge bg-success">Completed</span></td>
+                        </tr>
+                        <tr>
+                            <td>2025-11-22</td>
+                            <td>Admin</td>
+                            <td>User Management</td>
+                            <td>New user 'User2' created</td>
+                            <td><span class="badge bg-primary">Info</span></td>
+                        </tr>
+                        <tr>
+                            <td>2025-11-21</td>
+                            <td>User1</td>
+                            <td>Asset Check-out</td>
+                            <td>Checked out projector for meeting</td>
+                            <td><span class="badge bg-warning">In Progress</span></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<th:block layout:fragment="scripts">
+    <script th:inline="javascript">
+    document.addEventListener('DOMContentLoaded', function() {
+        var ctx = document.getElementById('myChart');
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
+                datasets: [{
+                    label: 'New Assets',
+                    data: [15, 21, 18, 24, 23, 24, 12],
+                    lineTension: 0.3,
+                    backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                    borderColor: 'rgba(59, 130, 246, 1)',
+                    borderWidth: 2,
+                    pointBackgroundColor: 'rgba(59, 130, 246, 1)',
+                    pointRadius: 4,
+                    pointHoverRadius: 6,
+                }]
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true
+                        }
+                    }]
+                },
+                legend: {
+                    display: true,
+                    position: 'top',
+                },
+                tooltips: {
+                    mode: 'index',
+                    intersect: false
+                },
+                hover: {
+                    mode: 'nearest',
+                    intersect: true
+                }
+            }
+        });
+    });
+    </script>
+</th:block>
+
 </body>
 </html>

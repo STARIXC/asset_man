@@ -1,105 +1,163 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{admin/layout}">
 <head>
     <title>Asset List</title>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-<div class="container mt-4">
-    <h2>Asset Inventory</h2>
-    
-    <!-- Facility Filter -->
-    <div class="row mb-3">
-        <div class="col-md-4">
-            <select class="form-select" id="facilityFilter" onchange="filterByFacility()">
-                <option value="">All Facilities</option>
-                <option th:each="facility : ${facilities}"
-                        th:value="${facility.id}"
-                        th:text="${facility.name}"
-                        th:selected="${selectedFacility == facility.id}">
-                </option>
-            </select>
+    <div layout:fragment="header">Asset Inventory</div>
+
+    <div layout:fragment="actions">
+        <a th:href="@{/assets/new}" class="btn btn-sm btn-primary">
+            <i class="material-icons">add</i> Add New Asset
+        </a>
+    </div>
+
+    <div layout:fragment="content">
+        <!-- Filter Card -->
+        <div class="row mb-4">
+            <div class="col-md-4">
+                <div class="card border-0">
+                    <div class="card-header">
+                        <i class="material-icons">filter_list</i> Filter
+                    </div>
+                    <div class="card-body">
+                        <form id="filterForm" method="get" class="row g-3">
+                            <div class="col-12">
+                                <label for="facilityFilter" class="form-label">Facility</label>
+                                <select class="form-select" id="facilityFilter" name="facilityId" onchange="this.form.submit()">
+                                    <option value="">All Facilities</option>
+                                    <option th:each="facility : ${facilities}"
+                                            th:value="${facility.id}"
+                                            th:text="${facility.facilityName}"
+                                            th:selected="${param.facilityId != null && param.facilityId[0] == facility.id.toString()}">
+                                    </option>
+                                </select>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
         </div>
-        <div class="col-md-4 ms-auto">
-            <a href="/assets/new" class="btn btn-primary">Add New Asset</a>
+
+        <!-- Assets Table Card -->
+        <div class="card border-0">
+            <div class="card-header">
+                <i class="material-icons">inventory_2</i> Asset Inventory
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover" id="assetsTable">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Facility</th>
+                                <th>CPU Serial</th>
+                                <th>CPU Model</th>
+                                <th>Specs</th>
+                                <th>Monitor</th>
+                                <th>UPS</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="asset : ${assets}">
+                                <td th:text="${asset.facility.facilityName}"></td>
+                                <td th:text="${asset.cpuSerial}"></td>
+                                <td th:text="${asset.cpuSpecification.model}"></td>
+                                <td>
+                                    <span th:text="${asset.cpuSpecification.processor}"></span><br>
+                                    <small class="text-muted">
+                                        RAM: <span th:text="${asset.cpuSpecification.memory}"></span><br>
+                                        HDD: <span th:text="${asset.cpuSpecification.hardDisk}"></span>
+                                    </small>
+                                </td>
+                                <td>
+                                    <span th:if="${asset.monitorModel}" th:text="${asset.monitorModel}"></span>
+                                    <small th:if="${asset.monitorSerial}" class="d-block text-muted" th:text="${asset.monitorSerial}"></small>
+                                </td>
+                                <td>
+                                    <span th:if="${asset.upsModel}" th:text="${asset.upsModel}"></span>
+                                    <small th:if="${asset.upsSerial}" class="d-block text-muted" th:text="${asset.upsSerial}"></small>
+                                </td>
+                                <td>
+                                    <div class="btn-group">
+                                        <a th:href="@{/assets/edit/{id}(id=${asset.id})}" 
+                                           class="btn btn-sm btn-outline-primary">
+                                            <i class="material-icons">edit</i>
+                                        </a>
+                                        <button type="button" 
+                                                class="btn btn-sm btn-outline-danger"
+                                                th:data-id="${asset.id}"
+                                                onclick="confirmDelete(this.getAttribute('data-id'))">
+                                            <i class="material-icons">delete</i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
         </div>
     </div>
 
-    <!-- Assets Table -->
-    <div class="table-responsive">
-        <table class="table table-striped table-hover">
-            <thead>
-                <tr>
-                    <th>Asset ID</th>
-                    <th>Facility</th>
-                    <th>CPU Model</th>
-                    <th>CPU Serial</th>
-                    <th>Monitor Model</th>
-                    <th>Monitor Serial</th>
-                    <th>UPS Model</th>
-                    <th>UPS Serial</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr th:each="asset : ${assets}">
-                    <td th:text="${asset.id}"></td>
-                    <td th:text="${asset.facility.name}"></td>
-                    <td th:text="${asset.cpuSpecification.modelName}"></td>
-                    <td th:text="${asset.cpuSerial}"></td>
-                    <td th:text="${asset.monitorModel}"></td>
-                    <td th:text="${asset.monitorSerial}"></td>
-                    <td th:text="${asset.upsModel}"></td>
-                    <td th:text="${asset.upsSerial}"></td>
-                    <td>
-                        <div class="btn-group">
-                            <a th:href="@{/assets/edit/{id}(id=${asset.id})}" 
-                               class="btn btn-sm btn-outline-primary">Edit</a>
-                            <button class="btn btn-sm btn-outline-danger"
-                                    onclick="confirmDelete(this.getAttribute('data-id'))"
-                                    th:data-id="${asset.id}">Delete</button>
-                        </div>
-                    </td>
-                </tr>
-                <tr th:if="${#lists.isEmpty(assets)}">
-                    <td colspan="9" class="text-center">No assets found</td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
-</div>
+    <!-- Page level scripts -->
+    <th:block layout:fragment="scripts">
+        <script>
+            $(document).ready(function() {
+                $('#assetsTable').DataTable({
+                    "order": [[1, "asc"]],
+                    "pageLength": 25
+                });
+            });
 
-<script>
-function filterByFacility() {
-    const facilityId = document.getElementById('facilityFilter').value;
-    window.location.href = '/assets' + (facilityId ? '?facilityId=' + facilityId : '');
-}
-
-function confirmDelete(assetId) {
-    if (confirm('Are you sure you want to delete this asset?')) {
-        fetch(`/assets/${assetId}`, { 
-            method: 'DELETE',
-            headers: {
-                'Content-Type': 'application/json'
+            function confirmDelete(assetId) {
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "This action cannot be undone!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, delete it!'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        deleteAsset(assetId);
+                    }
+                });
             }
-        })
-        .then(response => {
-            if (response.ok) {
-                window.location.reload();
-            } else {
-                alert('Error deleting asset');
-            }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            alert('Error deleting asset');
-        });
-    }
-}
-</script>
 
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+            function deleteAsset(assetId) {
+                fetch(`/api/assets/${assetId}`, {
+                    method: 'DELETE',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRF-TOKEN': document.querySelector('meta[name="_csrf"]').content
+                    }
+                })
+                .then(response => {
+                    if (response.ok) {
+                        Swal.fire(
+                            'Deleted!',
+                            'Asset has been deleted.',
+                            'success'
+                        ).then(() => {
+                            globalThis.location.reload();
+                        });
+                    } else {
+                        throw new Error('Failed to delete');
+                    }
+                })
+                .catch(error => {
+                    Swal.fire(
+                        'Error!',
+                        'Failed to delete the asset.',
+                        'error'
+                    );
+                });
+            }
+        </script>
+    </th:block>
 </body>
 </html>

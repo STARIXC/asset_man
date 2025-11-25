@@ -32,8 +32,8 @@
         });
 
 
-        if($('.digi-dataTable').length) {
-            $('.digi-dataTable').on('draw.dt', function() {
+        if($('.utj-dataTable').length) {
+            $('.utj-dataTable').on('draw.dt', function() {
                 $(this).find('select.form-control').select2({
                     minimumResultsForSearch: -1,
                     containerCssClass: ':all:',

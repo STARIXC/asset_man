@@ -1,10 +1,55 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{admin/layout}">
+
 <head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
+    <title>Reports & Export</title>
 </head>
+
 <body>
-$END$
+<div layout:fragment="header">Reports & Export</div>
+
+<div layout:fragment="content">
+    <div class="row g-3 g-md-4">
+        <div class="col-12 col-md-6">
+            <div class="card border-0">
+                <div class="card-header">
+                    <i class="material-icons">picture_as_pdf</i> Generate Asset Reports
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">Full Inventory Report</h5>
+                    <p class="card-text text-muted">Generate a PDF document containing a complete list of all assets in the inventory.</p>
+                    <a th:href="@{/admin/reports/generate/all}" class="btn btn-primary w-100">
+                        <i class="material-icons">download</i> Generate & Download
+                    </a>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-md-6">
+            <div class="card border-0">
+                <div class="card-header">
+                    <i class="material-icons">domain</i> Report by Facility
+                </div>
+                <div class="card-body">
+                    <form th:action="@{/admin/reports/generate/facility}" method="get">
+                        <div class="mb-3">
+                            <label for="facility" class="form-label">Select Facility</label>
+                            <select class="form-select" id="facility" name="facilityId">
+                                <option th:each="facility : ${facilities}"
+                                        th:value="${facility.id}"
+                                        th:text="${facility.facilityName}">
+                                </option>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-secondary w-100">
+                            <i class="material-icons">download</i> Generate for Facility
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 </body>
 </html>

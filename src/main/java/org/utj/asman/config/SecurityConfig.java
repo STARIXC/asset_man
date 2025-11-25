@@ -13,32 +13,44 @@ import org.springframework.security.web.SecurityFilterChain;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
+/**
+ * Spring Security Configuration for Spring Boot 2.7.x (Spring Security 5.x)
+ * and guaranteed Java 8 compatibility.
+ */
 @Configuration
 @EnableWebSecurity
 public class SecurityConfig {
 
     /**
-     * Configures the security filter chain using Spring Boot 2.7.x compatible syntax.
-     * Defines specific access rules for /admin/ and /api/public/.
+     * Configures the security filter chain.
      */
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(csrf -> csrf.disable()) // Disable CSRF for simpler API usage
-                .httpBasic(withDefaults()) // Enable HTTP Basic authentication
-                .authorizeRequests(auth -> auth // Spring Boot 2.7.x syntax
-                        // 1. Admin-specific endpoints: requires 'ADMIN' role/authority
-                        .antMatchers("/admin/**").hasAuthority("ADMIN")
-                        // 2. Open endpoints (e.g. for initial setup or health check)
+                .httpBasic(withDefaults()) // Enable HTTP Basic authentication (for API)
+                .authorizeRequests(auth -> auth // Spring Security 5.x syntax (Java 8 compatible)
+                        .antMatchers("/admin/**").hasRole("ADMIN")
+                        // Allow access to login page and static assets
+                        .antMatchers("/login", "/css/**", "/js/**", "/assets/**").permitAll()
                         .antMatchers("/api/public/**").permitAll()
-                        // 3. Secure everything else: requires any authenticated user
                         .anyRequest().authenticated()
+                )
+                .formLogin(form -> form
+                        .loginPage("/login") // The URL to show the login form (GET)
+                        .loginProcessingUrl("/login") // The URL to submit the login form to (POST) - CRITICAL FIX
+                        .defaultSuccessUrl("/admin/dashboard", true) // Redirect here after success
+                        .permitAll()
+                )
+                .logout(logout -> logout
+                        .logoutUrl("/logout")
+                        .logoutSuccessUrl("/login?logout")
+                        .permitAll()
                 );
         return http.build();
     }
 
     /**
-     * Defines the password encoder (BCrypt) used for securing user passwords.
+     * Defines the standard BCrypt Password Encoder.
      */
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -46,14 +58,14 @@ public class SecurityConfig {
     }
 
     /**
-     * Configures the Authentication Manager to use the custom UserDetailsService
-     * and the PasswordEncoder defined above.
+     * Configures the Authentication Manager using the custom UserDetailsService.
      */
     @Bean
     public AuthenticationManager authenticationManager(HttpSecurity http,
                                                        PasswordEncoder bCryptPasswordEncoder,
                                                        UserDetailsService userDetailService)
             throws Exception {
+        // Standard Java 8/Spring Security 5.x builder pattern
         return http.getSharedObject(AuthenticationManagerBuilder.class)
                 .userDetailsService(userDetailService)
                 .passwordEncoder(bCryptPasswordEncoder)

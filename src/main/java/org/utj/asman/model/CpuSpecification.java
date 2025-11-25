@@ -3,23 +3,34 @@ package org.utj.asman.model;
 import lombok.Data;
 import javax.persistence.*;
 
+/**
+ * Entity to store distinct, reusable hardware specifications for CPUs.
+ * This helps in normalizing data and easily creating lookup lists.
+ */
 @Entity
 @Data
-@Table(name = "cpu_specifications")
+@Table(name = "cpu_specifications", uniqueConstraints = {
+        @UniqueConstraint(columnNames = {"processor", "memory", "hard_disk"})
+})
 public class CpuSpecification {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(name = "model_name", nullable = false, unique = true)
-    private String modelName; // e.g., "OptiPlex 5090"
+    // Fields taken from the "COMPUTER DETAILS AND SPECS" section of the assignment form
+    @Column(name = "manufacturer", nullable = false)
+    private String manufacturer;
 
-    @Column(name = "processor_spec")
-    private String processorSpec; // e.g., "Intel Core i5"
+    @Column(name = "model", nullable = false)
+    private String model;
 
-    private String memory; // e.g., "8GB"
+    @Column(name = "processor", nullable = false)
+    private String processor; // e.g., "Intel® Core™ i5 10Th Gen"
 
-    @Column(name = "hard_disk_spec")
-    private String hardDiskSpec; // e.g., "500GB HDD"
+    @Column(name = "memory", nullable = false)
+    private String memory; // e.g., "8.00 GB"
+
+    @Column(name = "hard_disk", nullable = false)
+    private String hardDisk; // e.g., "1000 GB"
 }

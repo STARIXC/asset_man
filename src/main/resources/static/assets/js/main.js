@@ -255,7 +255,7 @@
         let lightMode = localStorage.getItem('lightMode');
         const enableLightMode = () => {
             $('body').removeClass('dark-theme').addClass('light-theme');
-            $('.header .main-logo .logo-big img, .mobile-logo img, .logo img').attr('src', 'assets/images/logo-black.png');
+            $('.header .main-logo .logo-big img, .mobile-logo img, .logo img').attr('src', '/assets/images/logo-black.png');
             localStorage.removeItem("blueMode");
             localStorage.removeItem("darkMode");
         };
@@ -854,7 +854,7 @@
                 $(this).parents('.table-responsive').css('overflow-x', 'auto');
             }
         });
-        $('.digi-dataTable').on('draw.dt', function () {
+        $('.utj-dataTable').on('draw.dt', function () {
             $('.dataTables_scrollBody .dropdown-menu').parent().on('shown.bs.dropdown', function () {
                 $(this).parents('.dataTables_scrollBody').addClass('overflow-visible');
             });
@@ -889,11 +889,11 @@
         //------------------------------------------------------------------------------------------------------------------
         $('.btn-list-view').on('click', function () {
             $(this).addClass('active').siblings().removeClass('active');
-            $(this).parents('.panel').find('.file-manager-row').addClass('list-view');
+            $(this).parents('.card').find('.file-manager-row').addClass('list-view');
         });
         $('.btn-grid-view').on('click', function () {
             $(this).addClass('active').siblings().removeClass('active');
-            $(this).parents('.panel').find('.file-manager-row').removeClass('list-view');
+            $(this).parents('.card').find('.file-manager-row').removeClass('list-view');
         });
 
 
@@ -917,9 +917,9 @@
         //------------------------------------------------------------------------------------------------------------------
         // Panel Close Function
         //------------------------------------------------------------------------------------------------------------------
-        $('.panel-close').on('click', function () {
+        $('.card-close').on('click', function () {
             $(this).toggleClass('collapsed');
-            $(this).parents('.panel').toggleClass('collapsed').find('.panel-body').slideToggle();
+            $(this).parents('.card').toggleClass('collapsed').find('.card-body').slideToggle();
             if ($(this).hasClass('collapsed')) {
                 $(this).html('<i class="fa-light fa-angle-down"></i>');
             } else {
@@ -1025,21 +1025,21 @@
 
             if ($(window).width() < 768) {
                 $('.message-list .single-message').on('click', function () {
-                    $(this).parents('.panel').addClass('closed');
+                    $(this).parents('.card').addClass('closed');
                 });
             }
 
 
             if ($(window).width() < 1400) {
                 $('.back-to-all-chat').on('click', function () {
-                    $('.chatting-panel').find('.panel:first-child').removeClass('closed');
+                    $('.chatting-panel').find('.card:first-child').removeClass('closed');
                 });
                 $('#searchMsg').prependTo('.chatting-panel-top-btns');
                 $('.back-to-chat-btn').on('click', function () {
-                    $(this).parents('.panel').addClass('closed');
+                    $(this).parents('.card').addClass('closed');
                 });
                 $('.show-chatting-info').on('click', function () {
-                    $('.chatting-panel').find('.panel:last-child').removeClass('closed');
+                    $('.chatting-panel').find('.card:last-child').removeClass('closed');
                 });
             }
         }
@@ -1079,10 +1079,10 @@
             $('.markAllMail').on('change', function () {
                 if ($(this).is(':checked')) {
                     $(this).parents('.dataTables_wrapper').find('tbody tr .form-check-input').prop('checked', true);
-                    $(this).parents('.panel-body').find('.top-action').removeClass('d-none');
+                    $(this).parents('.card-body').find('.top-action').removeClass('d-none');
                 } else {
                     $(this).parents('.dataTables_wrapper').find('tbody tr .form-check-input').prop('checked', false);
-                    $(this).parents('.panel-body').find('.top-action').addClass('d-none');
+                    $(this).parents('.card-body').find('.top-action').addClass('d-none');
                 }
             });
 
@@ -1118,10 +1118,10 @@
         //------------------------------------------------------------------------------------------------------------------
         if ($(window).width() < 992) {
             $('.mail-menu-btn').on('click', function () {
-                $('.email-panel > .panel:first-child').show();
+                $('.email-panel > .card:first-child').show();
             });
             $('.close-mail-menu-btn, .emial-menu-list .nav .btn-flush').on('click', function () {
-                $('.email-panel > .panel:first-child').hide();
+                $('.email-panel > .card:first-child').hide();
             });
         }
 

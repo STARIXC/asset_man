@@ -55,7 +55,7 @@
             $('#minimizeComposeMail').show();
             $('#expandComposeMail').html('<i class="fa-light fa-arrow-up-right-and-arrow-down-left-from-center"></i>');
         });
-        $('.compose-mail .panel-header h5').on('click', function(){
+        $('.compose-mail .card-header h5').on('click', function(){
             $('.compose-mail').removeClass('minimized');
             $('#minimizeComposeMail').show();
         });

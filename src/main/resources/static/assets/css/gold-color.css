@@ -198,7 +198,7 @@ input {
   --bs-progress-bar-bg: #F0C434;
 }
 
-.panel .panel-header form:focus-within {
+.card .card-header form:focus-within {
   -webkit-box-shadow: 0 0 0 0.15rem rgba(240, 196, 52, 0.25);
           box-shadow: 0 0 0 0.15rem rgba(240, 196, 52, 0.25);
 }
@@ -319,7 +319,7 @@ input[type=checkbox]:checked {
 }
 
 /* Main Content Section */
-.main-content.login-panel.login-panel-2 .panel-title::after {
+.main-content.login-panel.login-panel-2 .card-title::after {
   background: #F0C434;
 }
 .main-content .dashboard-filter .input-group-text {
