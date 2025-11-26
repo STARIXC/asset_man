@@ -5,6 +5,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.utj.asman.model.Facility;
+import org.thymeleaf.context.Context;
+import org.thymeleaf.spring5.SpringTemplateEngine;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.utj.asman.dto.FacilityPdfDto;
+import org.utj.asman.util.PdfGenerator;
 import org.utj.asman.service.CountyService;
 import org.utj.asman.service.FacilityService;
 
@@ -14,6 +22,9 @@ public class FacilityController {
 
     @Autowired
     private FacilityService facilityService;
+
+    @Autowired
+    private SpringTemplateEngine templateEngine;
 
     @Autowired
     private CountyService countyService;
@@ -49,5 +60,23 @@ public class FacilityController {
     @ResponseBody
     public Facility updateFacility(@PathVariable Long id, @RequestBody Facility facility) {
         return facilityService.updateFacility(id, facility);
+    }
+
+    @GetMapping("/pdf/{id}")
+
+    public ResponseEntity<byte[]> generateFacilityPdf(@PathVariable Long id) throws Exception {
+        Facility facility = facilityService.getFacilityById(id)
+                .orElseThrow(() -> new RuntimeException("Facility not found"));
+        // Convert to DTO for the PDF view
+        FacilityPdfDto dto = FacilityPdfDto.from(facility);
+        // Prepare Thymeleaf context
+        Context ctx = new Context();
+        ctx.setVariable("facility", dto);
+        String html = templateEngine.process("admin/facility_pdf", ctx);
+        byte[] pdfBytes = PdfGenerator.generatePdfFromHtml(html);
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_PDF);
+        headers.setContentDispositionFormData("attachment", "facility_" + id + ".pdf");
+        return new ResponseEntity<>(pdfBytes, headers, HttpStatus.OK);
     }
 }

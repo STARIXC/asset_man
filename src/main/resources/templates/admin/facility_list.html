@@ -1,196 +1,186 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{admin/layout}">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{admin/layout}">
 
 <head>
     <title>Facility Management</title>
 </head>
 
 <body>
-<div layout:fragment="header">Facility Management</div>
+    <div layout:fragment="header">Facility Management</div>
 
-<div layout:fragment="content">
-    <div class="row g-3 g-md-4">
-        <div class="col-12 col-lg-4">
-            <div class="card border-0 mb-4 mb-lg-0">
-                <div class="card-header">
-                   <span><i class="fa-solid fa-building-circle-check"></i> Add New Facility</span>
-                </div>
-                <div class="card-body">
-                    <form th:action="@{/admin/facilities/save}" method="post" th:object="${newFacility}">
-                        <input type="hidden" th:field="*{id}" />
-                        <div class="mb-3">
-                            <label for="facilityName" class="form-label">Facility Name</label>
-                            <input type="text" class="form-control" id="facilityName" th:field="*{facilityName}" placeholder="e.g., Kenyatta National Hospital" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="mflCode" class="form-label">MFL Code</label>
-                            <input type="text" class="form-control" id="mflCode" th:field="*{mflCode}" placeholder="e.g., 12345" required>
-                            <div class="form-text">Master Facility List Code (must be unique)</div>
-                        </div>
-                        <div class="mb-3">
-                            <label for="county" class="form-label">County</label>
-                            <select class="form-select" id="county" th:field="*{county.id}">
-                                <option value="">Select County</option>
-                                <option th:each="county : ${counties}"
-                                        th:value="${county.id}"
+    <div layout:fragment="content">
+        <div class="row g-3 g-md-4">
+            <div class="col-12 col-lg-4">
+                <div class="card border-0 mb-4 mb-lg-0">
+                    <div class="card-header">
+                        <span><i class="fa-solid fa-building-circle-check"></i> Add New Facility</span>
+                    </div>
+                    <div class="card-body">
+                        <form id="facilityForm" th:action="@{/admin/facilities/save}" method="post"
+                            th:object="${newFacility}">
+                            <input type="hidden" id="facilityId" th:field="*{id}" />
+                            <div class="mb-3">
+                                <label for="facilityName" class="form-label">Facility Name</label>
+                                <input type="text" class="form-control" id="facilityName" th:field="*{facilityName}"
+                                    placeholder="e.g., Kenyatta National Hospital" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="mflCode" class="form-label">MFL Code</label>
+                                <input type="text" class="form-control" id="mflCode" th:field="*{mflCode}"
+                                    placeholder="e.g., 12345" required>
+                                <div class="form-text">Master Facility List Code (must be unique)</div>
+                            </div>
+                            <div class="mb-3">
+                                <label for="county" class="form-label">County</label>
+                                <select class="form-select" id="county" th:field="*{county.id}">
+                                    <option value="">Select County</option>
+                                    <option th:each="county : ${counties}" th:value="${county.id}"
                                         th:text="${county.countyName}">
-                                </option>
-                            </select>
-                        </div>
-                        <div class="d-flex gap-2">
-                            <button type="submit" class="btn btn-primary flex-fill gap-2 d-flex align-items-center justify-content-center">
-                                <i class="fa-solid fa-floppy-disk"></i> Save Facility
-                            </button>
-                            <button type="button" onclick="resetForm()" class="btn btn-secondary">
-                                <i class="fa-solid fa-xmark"></i>
-                            </button>
-                        </div>
-                    </form>
+                                    </option>
+                                </select>
+                            </div>
+                            <div class="d-flex gap-2">
+                                <button type="submit"
+                                    class="btn btn-primary flex-fill gap-2 d-flex align-items-center justify-content-center">
+                                    <i class="fa-solid fa-floppy-disk"></i> <span id="submitBtnText">Save
+                                        Facility</span>
+                                </button>
+                                <button type="button" onclick="resetForm()" class="btn btn-secondary">
+                                    <i class="fa-solid fa-xmark"></i>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <div class="col-12 col-lg-8">
-            <div class="card border-0">
-                <div class="card-header">
-                    <span><i class="fa-solid fa-hospital"></i> Registered Facilities</span>
-                </div>
-                <div class="card-body p-0">
-                    <div class="table-responsive">
-                        <table id="facilitiesTable" class="table table-hover table-sm mb-0">
-                            <thead class="table-light">
-                                <tr>
-                                    <th class="d-none d-sm-table-cell">ID</th>
-                                    <th>Facility Name</th>
-                                    <th class="d-none d-md-table-cell">MFL Code</th>
-                                    <th class="d-none d-lg-table-cell">County</th>
-                                    <th>Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr th:each="facility : ${facilities}">
-                                    <td class="d-none d-sm-table-cell" th:text="${facility.id}">1</td>
-                                    <td th:text="${facility.facilityName}">Facility Name</td>
-                                    <td class="d-none d-md-table-cell">
-                                        <span class="badge bg-info" th:text="${facility.mflCode}">12345</span>
-                                    </td>
-                                    <td class="d-none d-lg-table-cell" th:text="${facility.county?.countyName ?: 'Not Assigned'}">County</td>
-                                    <td>
-                                        <div class="btn-box">
-                                            <button class="btn btn-sm btn-outline-primary" 
+            <div class="col-12 col-lg-8">
+                <div class="card border-0">
+                    <div class="card-header">
+                        <span><i class="fa-solid fa-hospital"></i> Registered Facilities</span>
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="table-responsive">
+                            <table id="facilitiesTable" class="table table-hover table-sm mb-0">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th class="d-none d-sm-table-cell">ID</th>
+                                        <th>Facility Name</th>
+                                        <th class="d-none d-md-table-cell">MFL Code</th>
+                                        <th class="d-none d-lg-table-cell">County</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr th:each="facility : ${facilities}">
+                                        <td class="d-none d-sm-table-cell" th:text="${facility.id}">1</td>
+                                        <td th:text="${facility.facilityName}">Facility Name</td>
+                                        <td class="d-none d-md-table-cell">
+                                            <span class="badge bg-info" th:text="${facility.mflCode}">12345</span>
+                                        </td>
+                                        <td class="d-none d-lg-table-cell"
+                                            th:text="${facility.county?.countyName ?: 'Not Assigned'}">County</td>
+                                        <td>
+                                            <div class="btn-box">
+                                                <button class="btn btn-sm btn-outline-primary"
                                                     th:onclick="'editFacility(' + ${facility.id} + ')'">
-                                                <i class="fa-solid fa-pen-to-square"></i>
-                                            </button>
-                                            <form th:action="@{/admin/facilities/delete/{id}(id=${facility.id})}" method="post" class="d-inline">
-                                                <button type="submit" class="btn btn-sm btn-outline-danger"
-                                                        onclick="return confirm('Are you sure you want to delete this facility?');">
-                                                    <i class="fa-solid fa-trash"></i>
+                                                    <i class="fa-solid fa-pen-to-square"></i>
                                                 </button>
-                                            </form>
-                                        </div>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
+                                                <form th:action="@{/admin/facilities/delete/{id}(id=${facility.id})}"
+                                                    method="post" class="d-inline">
+                                                    <button type="submit" class="btn btn-sm btn-outline-danger"
+                                                        onclick="return confirm('Are you sure you want to delete this facility?');">
+                                                        <i class="fa-solid fa-trash"></i>
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 
-<th:block layout:fragment="scripts">
-<script th:inline="javascript">
-    /*<![CDATA[*/
-    const csrfToken = /*[[${_csrf.token}]]*/ '';
-    const csrfHeader = /*[[${_csrf.headerName}]]*/ '';
+    <th:block layout:fragment="scripts">
+        <script th:inline="javascript">
+            /*<![CDATA[*/
+            const csrfToken = /*[[${_csrf.token}]]*/ '';
+            const csrfHeader = /*[[${_csrf.headerName}]]*/ '';
 
-    // Edit facility
-    function editFacility(id) {
-        fetch(`/admin/facilities/get/${id}`)
-            .then(response => response.json())
-            .then(facility => {
-                // Populate form fields
-                document.getElementById('facilityName').value = facility.facilityName;
-                document.getElementById('mflCode').value = facility.mflCode;
-                document.getElementById('county').value = facility.county ? facility.county.id : '';
-                
-                // Get the form
-                const form = document.querySelector('form');
-                
-                // Remove any existing hidden id field
-                const existingIdField = form.querySelector('input[name="id"]');
-                if (existingIdField) {
-                    existingIdField.remove();
-                }
-                
-                // Add hidden id field for update
-                const idInput = document.createElement('input');
-                idInput.type = 'hidden';
-                idInput.name = 'id';
-                idInput.value = facility.id;
-                form.appendChild(idInput);
-                
-                // Change button text
+            // Edit facility
+            function editFacility(id) {
+                fetch(`/admin/facilities/get/${id}`)
+                    .then(response => response.json())
+                    .then(facility => {
+                        // Populate form fields
+                        document.getElementById('facilityName').value = facility.facilityName;
+                        document.getElementById('mflCode').value = facility.mflCode;
+                        document.getElementById('county').value = facility.county ? facility.county.id : '';
+
+                        // Set hidden ID field
+                        document.getElementById('facilityId').value = facility.id;
+
+                        // Change button text and style
+                        const btn = document.querySelector('#facilityForm button[type="submit"]');
+                        document.getElementById('submitBtnText').textContent = 'Update Facility';
+                        btn.classList.remove('btn-primary');
+                        btn.classList.add('btn-warning');
+
+                        // Scroll to form
+                        document.querySelector('.card').scrollIntoView({ behavior: 'smooth' });
+                    })
+                    .catch(error => console.error('Error:', error));
+            }
+
+            // Reset form to add mode
+            function resetForm() {
+                const form = document.getElementById('facilityForm');
+                form.reset();
+
+                // Clear hidden ID field
+                document.getElementById('facilityId').value = '';
+
+                // Reset button
                 const btn = form.querySelector('button[type="submit"]');
-                btn.innerHTML = '<i class="fa-solid fa-pen-to-square"></i> Update Facility';
-                btn.classList.remove('btn-primary');
-                btn.classList.add('btn-warning');
-                
-                // Scroll to form
-                document.querySelector('.card').scrollIntoView({ behavior: 'smooth' });
-            })
-            .catch(error => console.error('Error:', error));
-    }
-    
-    // Reset form to add mode
-    function resetForm() {
-        const form = document.querySelector('form');
-        form.reset();
-        
-        // Remove hidden id field
-        const idField = form.querySelector('input[name="id"]');
-        if (idField) {
-            idField.remove();
-        }
-        
-        // Reset button
-        const btn = form.querySelector('button[type="submit"]');
-        btn.innerHTML = '<i class="fa-solid fa-floppy-disk"></i> Save Facility';
-        btn.classList.remove('btn-warning');
-        btn.classList.add('btn-primary');
-    }
+                document.getElementById('submitBtnText').textContent = 'Save Facility';
+                btn.classList.remove('btn-warning');
+                btn.classList.add('btn-primary');
+            }
 
-    // Initialize DataTable
-    $(document).ready(function() {
-        if ($('#facilitiesTable').length) {
-            var dataTable = $('#facilitiesTable').DataTable({
-                "pageLength": 10,
-                "lengthMenu": [
-                    [10, 25, 50, -1],
-                    [10, 25, 50, "All"]
-                ],
-                "language": {
-                    "search": "",
-                    "sLengthMenu": "_MENU_",
-                    "info": "Showing _START_ to _END_ of _TOTAL_ facilities",
-                    "infoEmpty": "No facilities available",
-                    "zeroRecords": "No matching facilities found"
-                },
-                "columnDefs": [
-                    { "orderable": false, "targets": 4 } // Disable sorting on Actions column
-                ]
+            // Initialize DataTable
+            $(document).ready(function () {
+                if ($('#facilitiesTable').length) {
+                    var dataTable = $('#facilitiesTable').DataTable({
+                        "pageLength": 10,
+                        "lengthMenu": [
+                            [10, 25, 50, -1],
+                            [10, 25, 50, "All"]
+                        ],
+                        "language": {
+                            "search": "",
+                            "sLengthMenu": "_MENU_",
+                            "info": "Showing _START_ to _END_ of _TOTAL_ facilities",
+                            "infoEmpty": "No facilities available",
+                            "zeroRecords": "No matching facilities found"
+                        },
+                        "columnDefs": [
+                            { "orderable": false, "targets": 4 } // Disable sorting on Actions column
+                        ]
+                    });
+
+                    // Custom styling for DataTable elements to match main.js
+                    $('#facilitiesTable_filter input').addClass('form-control').attr("placeholder", "Search...").addClass('form-control-sm');
+                    $('#facilitiesTable_length').find('select').addClass('form-control form-control-sm px-3');
+                }
             });
-
-            // Custom styling for DataTable elements to match main.js
-            $('#facilitiesTable_filter input').addClass('form-control').attr("placeholder", "Search...").addClass('form-control-sm');
-            $('#facilitiesTable_length').find('select').addClass('form-control form-control-sm px-3');
-        }
-    });
-    /*]]>*/
-</script>
-</th:block>
+            /*]]>*/
+        </script>
+    </th:block>
 </body>
+
 </html>

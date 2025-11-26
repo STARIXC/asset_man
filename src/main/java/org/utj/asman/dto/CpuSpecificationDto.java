@@ -4,6 +4,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.AllArgsConstructor;
 import javax.validation.constraints.NotBlank;
+import java.time.LocalDate;
 
 @Data
 @NoArgsConstructor
@@ -26,4 +27,8 @@ public class CpuSpecificationDto {
 
     @NotBlank(message = "Hard Disk spec is required")
     private String hardDisk;
+
+    private LocalDate purchaseDate;
+
+    private String supplier;
 }

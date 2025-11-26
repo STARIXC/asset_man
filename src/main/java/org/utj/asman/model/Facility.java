@@ -1,7 +1,11 @@
 package org.utj.asman.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
+import lombok.ToString;
 import javax.persistence.*;
+import java.time.LocalDateTime;
+import org.hibernate.annotations.CreationTimestamp;
 
 @Entity
 @Data // Generates Getters, Setters, ToString, etc. automatically
@@ -21,5 +25,11 @@ public class Facility {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "county_id")
+    @ToString.Exclude
+    @JsonIgnore
     private County county;
+
+    @CreationTimestamp
+    @Column(name = "created_at", nullable = true, updatable = false)
+    private LocalDateTime createdAt;
 }

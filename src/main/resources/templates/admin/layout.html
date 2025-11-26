@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="en" data-menu="vertical" data-nav-size="nav-default"
-      xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<html lang="en" data-menu="vertical" data-nav-size="nav-default" xmlns:th="http://www.thymeleaf.org"
+    xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -17,172 +17,222 @@
     <link rel="stylesheet" th:href="@{/assets/vendor/css/bootstrap.min.css}">
     <link rel="stylesheet" th:href="@{/assets/css/style.css}">
     <link rel="stylesheet" id="primaryColor" th:href="@{/assets/css/blue-color.css}">
-    <link rel="stylesheet" id="rtlStyle">
-    
+
+
     <!-- Custom styles for this template -->
     <link th:href="@{/assets/css/dashboard.css}" rel="stylesheet">
     <!--page specific css -->
     <th:block layout:fragment="styles"></th:block>
 </head>
+
 <body class="body-padding body-p-top light-theme">
 
-<!-- header start -->
-<div class="header">
-    <div class="row g-0 align-items-center">
-        <div class="col-xxl-6 col-xl-5 col-4 d-flex align-items-center gap-20">
-            <div class="main-logo d-lg-block d-none">
-                <div class="logo-big">
-                    <a href="index.html">ASMAN
-<!--                        <img src="assets/images/logo-black.png" alt="Logo">-->
-                    </a>
-                </div>
-                <div class="logo-small">
-                    <a href="index.html">ASMAN
-<!--                        <img src="assets/images/logo-small.png" alt="Logo">-->
-                    </a>
-                </div>
-            </div>
-            <div class="nav-close-btn">
-                <button id="navClose"><i class="fa-light fa-bars-sort"></i></button>
-            </div>
-
-        </div>
-        <div class="col-4 d-lg-none">
-            <div class="mobile-logo">
-                <a href="index.html">
-                    <img th:src="@{/assets/images/logo-black.png}" alt="Logo">
-                </a>
-            </div>
-        </div>
-        <div class="col-xxl-6 col-xl-7 col-lg-8 col-4">
-            <div class="header-right-btns d-flex justify-content-end align-items-center">
-                <div class="header-collapse-group">
-                    <div class="header-right-btns d-flex justify-content-end align-items-center p-0">
-                        <form class="header-form">
-                            <input type="search" name="search" placeholder="Search..." required>
-                            <button type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
-                        </form>
-                        <div class="header-right-btns d-flex justify-content-end align-items-center p-0">
-                            <button class="header-btn fullscreen-btn" id="btnFullscreen"><i class="fa-light fa-expand"></i></button>
-                        </div>
+    <!-- header start -->
+    <div class="header">
+        <div class="row g-0 align-items-center">
+            <div class="col-xxl-6 col-xl-5 col-4 d-flex align-items-center gap-20">
+                <div class="main-logo d-lg-block d-none">
+                    <div class="logo-big">
+                        <a href="index.html">
+                            <img th:src="@{/assets/images/logo-black.png}" alt="Logo">
+                        </a>
+                    </div>
+                    <div class="logo-small">
+                        <a href="index.html">
+                            <img th:src="@{/assets/images/logo-small.png}" alt="Logo">
+                        </a>
                     </div>
                 </div>
-                <button class="header-btn header-collapse-group-btn d-lg-none"><i class="fa-light fa-ellipsis-vertical"></i></button>
-                <button class="header-btn theme-settings-btn d-lg-none"><i class="fa-light fa-gear"></i></button>
-                <div class="header-btn-box profile-btn-box">
-                    <button class="profile-btn" data-bs-toggle="dropdown" aria-expanded="false">
-                        <img th:src="@{/assets/images/admin.png}" alt="image">
-                    </button>
-                    <ul class="dropdown-menu profile-dropdown-menu">
-                        <li>
-                            <div class="dropdown-txt text-center">
-                                <p class="mb-0"><span class="d-none d-lg-inline ms-2 text-dark fw-500" sec:authentication="name">Username</span></p>
-                                <span class="d-block">Web Developer</span>
+                <div class="nav-close-btn">
+                    <button id="navClose"><i class="fa-light fa-bars-sort"></i></button>
+                </div>
 
+            </div>
+            <div class="col-4 d-lg-none">
+                <div class="mobile-logo">
+                    <a href="index.html">
+                        <img th:src="@{/assets/images/logo-black.png}" alt="Logo">
+                    </a>
+                </div>
+            </div>
+            <div class="col-xxl-6 col-xl-7 col-lg-8 col-4">
+                <div class="header-right-btns d-flex justify-content-end align-items-center">
+                    <div class="header-collapse-group">
+                        <div class="header-right-btns d-flex justify-content-end align-items-center p-0">
+                            <form class="header-form">
+                                <input type="search" name="search" placeholder="Search..." required>
+                                <button type="submit"><i class="fa-solid fa-magnifying-glass"></i></button>
+                            </form>
+                            <div class="header-right-btns d-flex justify-content-end align-items-center p-0">
+                                <button class="header-btn fullscreen-btn" id="btnFullscreen"><i
+                                        class="fa-light fa-expand"></i></button>
                             </div>
-                        </li>
-                       <li>
-                           <form th:action="@{/logout}" method="post" class="d-inline">
-                               <button class="dropdown-item border-0 w-100 text-start" type="submit"><i class="material-icons">logout</i>Sign out</button>
-                           </form>
-                       </li>
-                    </ul>
+                        </div>
+                    </div>
+                    <button class="header-btn header-collapse-group-btn d-lg-none"><i
+                            class="fa-light fa-ellipsis-vertical"></i></button>
+                    <button class="header-btn theme-settings-btn d-lg-none"><i class="fa-light fa-gear"></i></button>
+                    <div class="header-btn-box profile-btn-box">
+                        <button class="profile-btn" data-bs-toggle="dropdown" aria-expanded="false">
+                            <img th:src="@{/assets/images/admin.png}" alt="image">
+                        </button>
+                        <ul class="dropdown-menu profile-dropdown-menu">
+                            <li>
+                                <div class="dropdown-txt text-center">
+                                    <p class="mb-0"><span class="d-none d-lg-inline ms-2 text-dark fw-500"
+                                            sec:authentication="name">Username</span></p>
+                                    <span class="d-block">Web Developer</span>
+
+                                </div>
+                            </li>
+                            <li>
+                                <form th:action="@{/logout}" method="post" class="d-inline">
+                                    <button class="dropdown-item border-0 w-100 text-start" type="submit"><i
+                                            class="material-icons">logout</i>Sign out</button>
+                                </form>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
-<!-- header end -->
-<!-- main sidebar start -->
-<div class="main-sidebar">
-    <div class="main-menu">
-        <ul class="sidebar-menu scrollable">
-            <li class="sidebar-item open">
-                <a role="button" class="sidebar-link-group-title has-sub">Dashboard</a>
-                <ul class="sidebar-link-group">
+    <!-- header end -->
+    <!-- main sidebar start -->
+    <div class="main-sidebar">
+        <div class="main-menu">
+            <ul class="sidebar-menu scrollable">
+                <li class="sidebar-item open">
+                    <a role="button" class="sidebar-link-group-title has-sub">Dashboard</a>
+                    <ul class="sidebar-link-group">
 
-                    <li class="sidebar-dropdown-item">
-                        <a class="sidebar-link" th:classappend="${#httpServletRequest.getRequestURI().startsWith('/admin/dashboard') ? 'active' : ''}"
-                           th:href="@{/admin/dashboard}">
-                            <span class="nav-icon">
-                            <i class="fa-light fa-user-headset"></i>
-                            </span> <span class="sidebar-txt">Dashboard</span>
-                        </a>
-                    </li>
-                    <li class="sidebar-dropdown-item">
-                        <a class="sidebar-link material-sidebar-link" th:classappend="${#httpServletRequest.getRequestURI().startsWith('/admin/assets') ? 'active' : ''}"
-                           th:href="@{/admin/assets}">
-                            <i class="fa-light fa-user-headset"></i>
-                            <span>Asset Management</span>
-                        </a>
-                    </li>
-                    <li class="sidebar-dropdown-item">
-                        <a class="sidebar-link material-sidebar-link" th:classappend="${#httpServletRequest.getRequestURI().startsWith('/admin/cpu-specs') ? 'active' : ''}"
-                           th:href="@{/admin/cpu-specs}">
-                            <i class="fa-light fa-user-headset"></i>
-                            <span>Hardware Specs</span>
-                        </a>
-                    </li>
-                       <li class="sidebar-dropdown-item">
-                        <a class="sidebar-link material-sidebar-link" th:classappend="${#httpServletRequest.getRequestURI().startsWith('/admin/facilities') ? 'active' : ''}"
-                           th:href="@{/admin/facilities}">
-                            <i class="fa-solid fa-hospital"></i>
-                            <span>Facility Management</span>
-                        </a>
-                    </li>
-                    <li class="sidebar-dropdown-item">
-                        <a class="sidebar-link material-sidebar-link" th:classappend="${#httpServletRequest.getRequestURI().startsWith('/admin/counties') ? 'active' : ''}"
-                           th:href="@{/admin/counties}">
-                            <i class="fa-solid fa-map-location-dot"></i>
-                            <span>County Management</span>
-                        </a>
-                    </li>
-                    <li class="sidebar-dropdown-item">
-                        <a class="sidebar-link material-sidebar-link" th:classappend="${#httpServletRequest.getRequestURI().startsWith('/admin/users') ? 'active' : ''}"
-                           th:href="@{/admin/users}">
-                            <i class="fa-light fa-user-headset"></i>
-                            <span>User Management</span>
-                        </a>
-                    </li>
-                    <li class="sidebar-dropdown-item">
-                        <a class="sidebar-link material-sidebar-link" th:classappend="${#httpServletRequest.getRequestURI().startsWith('/admin/reports') ? 'active' : ''}"
-                           th:href="@{/admin/reports}">
-                            <i class="fa-light fa-user-headset"></i>
-                            <span>Reports & Export</span>
-                        </a>
-                    </li>
-                </ul>
-            </li>
+                        <li class="sidebar-dropdown-item">
+                            <a class="sidebar-link"
+                                th:classappend="${#httpServletRequest.getRequestURI().startsWith('/admin/dashboard') ? 'active' : ''}"
+                                th:href="@{/admin/dashboard}">
+                                <span class="nav-icon">
+                                    <i class="fa-light fa-user-headset"></i>
+                                </span> <span class="sidebar-txt">Dashboard</span>
+                            </a>
+                        </li>
 
-        </ul>
+
+                    </ul>
+                </li>
+                <li class="sidebar-item open">
+                    <a role="button" class="sidebar-link-group-title has-sub">CPU and Asset Management</a>
+                    <ul class="sidebar-link-group">
+                        <li class="sidebar-dropdown-item">
+                            <a class="sidebar-link material-sidebar-link"
+                                th:classappend="${#httpServletRequest.getRequestURI().startsWith('/admin/cpu-specs') ? 'active' : ''}"
+                                th:href="@{/admin/cpu-specs}">
+                                <i class="fa-light fa-user-headset"></i>
+                                <span>Hardware Specs</span>
+                            </a>
+                        </li>
+                        <li class="sidebar-dropdown-item">
+                            <a class="sidebar-link material-sidebar-link"
+                                th:classappend="${#httpServletRequest.getRequestURI().startsWith('/admin/assets') ? 'active' : ''}"
+                                th:href="@{/admin/assets}">
+                                <i class="fa-light fa-user-headset"></i>
+                                <span>Asset Management</span>
+                            </a>
+                        </li>
+
+                    </ul>
+                </li>
+                <li class="sidebar-item open">
+                    <a role="button" class="sidebar-link-group-title has-sub">Settings</a>
+                    <ul class="sidebar-link-group">
+                        <li class="sidebar-dropdown-item">
+                            <a class="sidebar-link material-sidebar-link"
+                                th:classappend="${#httpServletRequest.getRequestURI().startsWith('/admin/facilities') ? 'active' : ''}"
+                                th:href="@{/admin/facilities}">
+                                <i class="fa-solid fa-hospital"></i>
+                                <span>Facility Management</span>
+                            </a>
+                        </li>
+                        <li class="sidebar-dropdown-item">
+                            <a class="sidebar-link material-sidebar-link"
+                                th:classappend="${#httpServletRequest.getRequestURI().startsWith('/admin/counties') ? 'active' : ''}"
+                                th:href="@{/admin/counties}">
+                                <i class="fa-solid fa-map-location-dot"></i>
+                                <span>County Management</span>
+                            </a>
+                        </li>
+
+                    </ul>
+                </li>
+                <li class="sidebar-item open">
+                    <a role="button" class="sidebar-link-group-title has-sub">Reports</a>
+                    <ul class="sidebar-link-group">
+                        <li class="sidebar-dropdown-item">
+                            <a class="sidebar-link material-sidebar-link"
+                                th:classappend="${#httpServletRequest.getRequestURI().startsWith('/admin/reports') ? 'active' : ''}"
+                                th:href="@{/admin/reports}">
+                                <i class="fa-light fa-user-headset"></i>
+                                <span>Reports & Export</span>
+                            </a>
+                        </li>
+
+                    </ul>
+                </li>
+                <!-- user management -->
+                <li class="sidebar-item open">
+                    <a role="button" class="sidebar-link-group-title has-sub">User Management</a>
+                    <ul class="sidebar-link-group">
+                        <li class="sidebar-dropdown-item">
+                            <a class="sidebar-link material-sidebar-link"
+                                th:classappend="${#httpServletRequest.getRequestURI().startsWith('/admin/users') ? 'active' : ''}"
+                                th:href="@{/admin/users}">
+                                <i class="fa-light fa-user-headset"></i>
+                                <span>User Management</span>
+                            </a>
+                        </li>
+
+                    </ul>
+                </li>
+                <li class="help-center">
+                    <h3>Help Center</h3>
+                    <p>We're an award-winning, forward thinking</p>
+                    <a href="#" class="btn btn-sm btn-light">Go to Help Center</a>
+                </li>
+
+
+            </ul>
+        </div>
     </div>
-</div>
-<!-- main sidebar end -->
-<!-- main content start -->
-<div class="main-content">
-    <!-- Dynamic Content -->
-    <div layout:fragment="content" class="py-4">
+    <!-- main sidebar end -->
+    <!-- main content start -->
+    <div class="main-content">
+        <!-- Dynamic Content -->
+        <div layout:fragment="content" class="py-4">
+        </div>
+
+        <!-- footer start -->
+        <div class="footer">
+            <p>Copyright©
+                <script>document.write(new Date().getFullYear())</script> All Rights Reserved By <span
+                    class="text-primary">USAID Tujenge Jamii</span>
+            </p>
+        </div>
+        <!-- footer end -->
     </div>
 
-    <!-- footer start -->
-    <div class="footer">
-        <p>Copyright© <script>document.write(new Date().getFullYear())</script> All Rights Reserved By <span class="text-primary">USAID Tujenge Jamii</span></p>
-    </div>
-    <!-- footer end -->
-</div>
 
 
+    <script th:src="@{/assets/vendor/js/jquery-3.6.0.min.js}"></script>
+    <script th:src="@{/assets/vendor/js/jquery.overlayScrollbars.min.js}"></script>
+    <script th:src="@{/assets/vendor/js/apexcharts.js}"></script>
+    <script th:src="@{/assets/vendor/js/jquery.dataTables.min.js}"></script>
+    <script th:src="@{/assets/vendor/js/moment.min.js}"></script>
+    <script th:src="@{/assets/vendor/js/daterangepicker.js}"></script>
+    <script th:src="@{/assets/vendor/js/bootstrap.bundle.min.js}"></script>
+    <script th:src="@{/assets/vendor/js/sweetalert2.all.min.js}"></script>
+    <script th:src="@{/assets/js/dashboard.js}"></script>
+    <script th:src="@{/assets/js/main.js}"></script>
 
-<script th:src="@{/assets/vendor/js/jquery-3.6.0.min.js}"></script>
-<script th:src="@{/assets/vendor/js/jquery.overlayScrollbars.min.js}"></script>
-<script th:src="@{/assets/vendor/js/apexcharts.js}"></script>
-<script th:src="@{/assets/vendor/js/jquery.dataTables.min.js}"></script>
-<script th:src="@{/assets/vendor/js/moment.min.js}"></script>
-<script th:src="@{/assets/vendor/js/daterangepicker.js}"></script>
-<script th:src="@{/assets/vendor/js/bootstrap.bundle.min.js}"></script>
-<script th:src="@{/assets/js/dashboard.js}"></script>
-<script th:src="@{/assets/js/main.js}"></script>
-    
     <th:block layout:fragment="scripts"></th:block>
 </body>
+
 </html>

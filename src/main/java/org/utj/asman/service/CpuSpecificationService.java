@@ -31,12 +31,12 @@ public class CpuSpecificationService {
      * (processor + memory + hardDisk). If found, returns it.
      * If not, saves a new one using ALL provided fields.
      */
-    public CpuSpecification findOrCreateSpecification(String manufacturer, String model, String processor, String memory, String hardDisk) {
+    public CpuSpecification findOrCreateSpecification(String manufacturer, String model, String processor,
+            String memory, String hardDisk) {
         Optional<CpuSpecification> existingSpec = cpuSpecificationRepository.findByProcessorAndMemoryAndHardDisk(
                 processor,
                 memory,
-                hardDisk
-        );
+                hardDisk);
 
         if (existingSpec.isPresent()) {
             return existingSpec.get();
@@ -53,5 +53,9 @@ public class CpuSpecificationService {
 
     public CpuSpecification saveCpuSpec(CpuSpecification spec) {
         return cpuSpecificationRepository.save(spec);
+    }
+
+    public void deleteCpuSpec(Long id) {
+        cpuSpecificationRepository.deleteById(id);
     }
 }

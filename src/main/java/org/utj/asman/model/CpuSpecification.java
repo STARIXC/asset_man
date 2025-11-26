@@ -2,6 +2,7 @@ package org.utj.asman.model;
 
 import lombok.Data;
 import javax.persistence.*;
+import java.time.LocalDate;
 
 /**
  * Entity to store distinct, reusable hardware specifications for CPUs.
@@ -10,7 +11,7 @@ import javax.persistence.*;
 @Entity
 @Data
 @Table(name = "cpu_specifications", uniqueConstraints = {
-        @UniqueConstraint(columnNames = {"processor", "memory", "hard_disk"})
+        @UniqueConstraint(columnNames = { "processor", "memory", "hard_disk" })
 })
 public class CpuSpecification {
 
@@ -18,7 +19,8 @@ public class CpuSpecification {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // Fields taken from the "COMPUTER DETAILS AND SPECS" section of the assignment form
+    // Fields taken from the "COMPUTER DETAILS AND SPECS" section of the assignment
+    // form
     @Column(name = "manufacturer", nullable = false)
     private String manufacturer;
 
@@ -33,4 +35,10 @@ public class CpuSpecification {
 
     @Column(name = "hard_disk", nullable = false)
     private String hardDisk; // e.g., "1000 GB"
+
+    @Column(name = "purchase_date", nullable = true)
+    private LocalDate purchaseDate;
+
+    @Column(name = "supplier", nullable = true)
+    private String supplier;
 }

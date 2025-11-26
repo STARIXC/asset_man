@@ -1,102 +1,138 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{admin/layout}">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{admin/layout}">
 
 <head>
     <title>CPU Specifications</title>
 </head>
 
 <body>
-<div layout:fragment="header">Hardware Specifications</div>
+    <div layout:fragment="header">Hardware Specifications</div>
 
-<div layout:fragment="content">
-    <div class="row">
-        <div class="col-12">
-            <div class="card border-0 mb-4">
-                <div class="card-header">
-                    <i class="fa-solid fa-memory"></i> Add New CPU Specification
-                </div>
-                <div class="card-body">
-                    <form th:action="@{/admin/cpu-specs/save}" method="post" th:object="${newSpec}">
-                        <div class="row g-2 g-md-3">
-                            <div class="col-12 col-md-6 col-lg-4">
-                                <label for="manufacturer" class="form-label">Manufacturer</label>
-                                <input type="text" class="form-control" id="manufacturer" th:field="*{manufacturer}" placeholder="e.g. Dell" required>
+    <div layout:fragment="content">
+        <div class="row">
+            <div class="col-12">
+                <div class="card border-0 mb-4">
+                    <div class="card-header">
+                        <i class="fa-solid fa-memory"></i> Add New CPU Specification
+                    </div>
+                    <div class="card-body">
+                        <form id="cpuSpecForm" th:action="@{/admin/cpu-specs/save}" method="post"
+                            th:object="${newSpec}">
+                            <input type="hidden" id="specId" name="id">
+                            <div class="row g-2 g-md-3">
+                                <div class="col-12 col-md-6 col-lg-3">
+                                    <label for="manufacturer" class="form-label">Manufacturer</label>
+                                    <input type="text" class="form-control" id="manufacturer" name="manufacturer"
+                                        th:field="*{manufacturer}" placeholder="e.g. Dell" required>
+                                </div>
+                                <div class="col-12 col-md-6 col-lg-3">
+                                    <label for="model" class="form-label">Model Name</label>
+                                    <input type="text" class="form-control" id="model" name="model" th:field="*{model}"
+                                        placeholder="e.g. OptiPlex 5090" required>
+                                </div>
+                                <div class="col-12 col-md-6 col-lg-3">
+                                    <label for="processor" class="form-label">Processor</label>
+                                    <input type="text" class="form-control" id="processor" name="processor"
+                                        th:field="*{processor}" placeholder="e.g. Intel Core i5 10th Gen" required>
+                                </div>
+                                <div class="col-12 col-md-6 col-lg-3">
+                                    <label for="memory" class="form-label">Memory (RAM)</label>
+                                    <input type="text" class="form-control" id="memory" name="memory"
+                                        th:field="*{memory}" placeholder="e.g. 8GB DDR4" required>
+                                </div>
+                                <div class="col-12 col-md-6 col-lg-3">
+                                    <label for="hardDisk" class="form-label">Hard Disk</label>
+                                    <input type="text" class="form-control" id="hardDisk" name="hardDisk"
+                                        th:field="*{hardDisk}" placeholder="e.g. 500GB SSD" required>
+                                </div>
+                                <div class="col-12 col-md-6 col-lg-3">
+                                    <label for="purchaseDate" class="form-label">Purchase Date</label>
+                                    <input type="date" class="form-control" id="purchaseDate" name="purchaseDate"
+                                        th:field="*{purchaseDate}">
+                                </div>
+                                <div class="col-12 col-md-6 col-lg-3">
+                                    <label for="supplier" class="form-label">Supplier</label>
+                                    <input type="text" class="form-control" id="supplier" name="supplier"
+                                        th:field="*{supplier}" placeholder="e.g. Fashtech Computers Ltd.">
+                                </div>
+                                <div class="col-12 col-md-6 col-lg-3 d-flex align-items-end">
+                                    <button type="submit" id="submitBtn"
+                                        class="btn btn-primary w-100 gap-2 d-flex align-items-center justify-content-center">
+                                        <i class="fa-solid fa-plus"></i> <span id="submitText">Add Spec</span>
+                                    </button>
+                                </div>
                             </div>
-                            <div class="col-12 col-md-6 col-lg-4">
-                                <label for="model" class="form-label">Model Name</label>
-                                <input type="text" class="form-control" id="model" th:field="*{model}" placeholder="e.g. OptiPlex 5090" required>
-                            </div>
-                            <div class="col-12 col-md-6 col-lg-4">
-                                <label for="processor" class="form-label">Processor</label>
-                                <input type="text" class="form-control" id="processor" th:field="*{processor}" placeholder="e.g. Intel Core i5 10th Gen" required>
-                            </div>
-                            <div class="col-12 col-md-6 col-lg-4">
-                                <label for="memory" class="form-label">Memory (RAM)</label>
-                                <input type="text" class="form-control" id="memory" th:field="*{memory}" placeholder="e.g. 8GB DDR4" required>
-                            </div>
-                            <div class="col-12 col-md-6 col-lg-4">
-                                <label for="hardDisk" class="form-label">Hard Disk</label>
-                                <input type="text" class="form-control" id="hardDisk" th:field="*{hardDisk}" placeholder="e.g. 500GB SSD" required>
-                            </div>
-                            <div class="col-12 col-md-6 col-lg-4 d-flex align-items-end">
-                                <button type="submit" class="btn btn-primary w-100 gap-2 d-flex align-items-center justify-content-center">
-                                    <i class="fa-solid fa-plus"></i> Add Spec
-                                </button>
-                            </div>
-                        </div>
-                    </form>
+                        </form>
+                    </div>
                 </div>
             </div>
-        </div>
 
-        <div class="col-12">
-            <div class="card border-0">
-                <div class="card-header">
-                    <i class="fa-solid fa-list"></i> Available Configurations
-                </div>
-                <div class="card-body p-0">
-                    <div class="table-responsive">
-                        <table class="table table-hover table-sm mb-0">
-                            <thead class="table-light">
-                                <tr>
-                                    <th class="d-none d-sm-table-cell">ID</th>
-                                    <th>Manufacturer</th>
-                                    <th class="d-none d-md-table-cell">Model</th>
-                                    <th class="d-none d-lg-table-cell">Processor</th>
-                                    <th>RAM</th>
-                                    <th class="d-none d-lg-table-cell">Storage</th>
-                                    <th>Actions</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr th:each="spec : ${specs}">
-                                    <td class="d-none d-sm-table-cell" th:text="${spec.id}">1</td>
-                                    <td th:text="${spec.manufacturer}">Dell</td>
-                                    <td class="d-none d-md-table-cell fw-bold" th:text="${spec.model}">OptiPlex</td>
-                                    <td class="d-none d-lg-table-cell" th:text="${spec.processor}">i5</td>
-                                    <td><span class="badge bg-secondary" th:text="${spec.memory}">8GB</span></td>
-                                    <td class="d-none d-lg-table-cell" th:text="${spec.hardDisk}">500GB</td>
-                                    <td>
-                                        <form th:action="@{/admin/cpu-specs/delete/{id}(id=${spec.id})}" method="post" class="form-display-inline">
-                                            <button type="submit" class="btn btn-sm btn-outline-danger"
-                                                    onclick="return confirm('Are you sure you want to delete this spec?');">
-                                                <i class="fa-solid fa-trash"></i>
+            <div class="col-12">
+                <div class="card border-0">
+                    <div class="card-header">
+                        <i class="fa-solid fa-list"></i> Available Configurations
+                    </div>
+                    <div class="card-body p-0">
+                        <div class="table-responsive">
+                            <table class="table table-hover table-sm mb-0">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th class="d-none d-sm-table-cell">ID</th>
+                                        <th>Manufacturer</th>
+                                        <th class="d-none d-md-table-cell">Model</th>
+                                        <th class="d-none d-lg-table-cell">Processor</th>
+                                        <th>RAM</th>
+                                        <th class="d-none d-lg-table-cell">Storage</th>
+                                        <th class="d-none d-xl-table-cell">Purchase Date</th>
+                                        <th class="d-none d-xl-table-cell">Supplier</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr th:each="spec : ${specs}">
+                                        <td class="d-none d-sm-table-cell" th:text="${spec.id}">1</td>
+                                        <td th:text="${spec.manufacturer}">Dell</td>
+                                        <td class="d-none d-md-table-cell fw-bold" th:text="${spec.model}">OptiPlex</td>
+                                        <td class="d-none d-lg-table-cell" th:text="${spec.processor}">i5</td>
+                                        <td><span class="badge bg-secondary" th:text="${spec.memory}">8GB</span></td>
+                                        <td class="d-none d-lg-table-cell" th:text="${spec.hardDisk}">500GB</td>
+                                        <td class="d-none d-xl-table-cell"
+                                            th:text="${spec.purchaseDate != null ? #temporals.format(spec.purchaseDate, 'dd/MM/yyyy') : '-'}">
+                                            -</td>
+                                        <td class="d-none d-xl-table-cell" th:text="${spec.supplier ?: '-'}">-</td>
+                                        <td>
+                                            <button type="button"
+                                                class="btn btn-sm btn-outline-primary me-1 edit-spec-btn"
+                                                th:data-id="${spec.id}" title="Edit">
+                                                <i class="fa-solid fa-edit"></i>
                                             </button>
-                                        </form>
-                                    </td>
-                                </tr>
-                                <tr th:if="${#lists.isEmpty(specs)}">
-                                    <td colspan="7" class="text-center text-muted p-4">No specifications defined yet.</td>
-                                </tr>
-                            </tbody>
-                        </table>
+                                            <form th:action="@{/admin/cpu-specs/delete/{id}(id=${spec.id})}"
+                                                method="post" class="d-inline delete-spec-form">
+                                                <button type="submit" class="btn btn-sm btn-outline-danger"
+                                                    title="Delete">
+                                                    <i class="fa-solid fa-trash"></i>
+                                                </button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                    <tr th:if="${#lists.isEmpty(specs)}">
+                                        <td colspan="9" class="text-center text-muted p-4">No specifications defined
+                                            yet.</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
+
+    <th:block layout:fragment="scripts">
+        <script th:src="@{/assets/js/cpu-spec.js}"></script>
+    </th:block>
+
 </body>
+
 </html>

@@ -1,6 +1,8 @@
 package org.utj.asman.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
+import lombok.ToString;
 import javax.persistence.*;
 import java.util.List;
 
@@ -20,5 +22,7 @@ public class County {
     private String countyCode;
 
     @OneToMany(mappedBy = "county", cascade = CascadeType.ALL)
+    @ToString.Exclude
+    @JsonIgnore
     private List<Facility> facilities;
 }
