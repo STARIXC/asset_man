@@ -11,10 +11,11 @@ import java.util.Map;
 
 @Service
 public class PdfGenerationService {
-
+    
+    @Autowired
     private final TemplateEngine templateEngine;
 
-    @Autowired
+    
     public PdfGenerationService(TemplateEngine templateEngine) {
         this.templateEngine = templateEngine;
     }

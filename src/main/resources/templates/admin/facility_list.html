@@ -10,6 +10,16 @@
     <div layout:fragment="header">Facility Management</div>
 
     <div layout:fragment="content">
+        <!-- Success/Error Messages -->
+        <div th:if="${successMessage}" class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="fa-solid fa-circle-check"></i> <span th:text="${successMessage}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+        <div th:if="${errorMessage}" class="alert alert-danger alert-dismissible fade show" role="alert">
+            <i class="fa-solid fa-circle-exclamation"></i> <span th:text="${errorMessage}"></span>
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+
         <div class="row g-3 g-md-4">
             <div class="col-12 col-lg-4">
                 <div class="card border-0 mb-4 mb-lg-0">
@@ -20,26 +30,34 @@
                         <form id="facilityForm" th:action="@{/admin/facilities/save}" method="post"
                             th:object="${newFacility}">
                             <input type="hidden" id="facilityId" th:field="*{id}" />
+
                             <div class="mb-3">
                                 <label for="facilityName" class="form-label">Facility Name</label>
                                 <input type="text" class="form-control" id="facilityName" th:field="*{facilityName}"
                                     placeholder="e.g., Kenyatta National Hospital" required>
+                                <div class="invalid-feedback" th:if="${#fields.hasErrors('facilityName')}"
+                                    th:errors="*{facilityName}">Error</div>
                             </div>
+
                             <div class="mb-3">
                                 <label for="mflCode" class="form-label">MFL Code</label>
                                 <input type="text" class="form-control" id="mflCode" th:field="*{mflCode}"
                                     placeholder="e.g., 12345" required>
                                 <div class="form-text">Master Facility List Code (must be unique)</div>
+                                <div class="invalid-feedback" th:if="${#fields.hasErrors('mflCode')}"
+                                    th:errors="*{mflCode}">Error</div>
                             </div>
+
                             <div class="mb-3">
                                 <label for="county" class="form-label">County</label>
-                                <select class="form-select" id="county" th:field="*{county.id}">
+                                <select class="form-select" id="county" name="county.id">
                                     <option value="">Select County</option>
                                     <option th:each="county : ${counties}" th:value="${county.id}"
                                         th:text="${county.countyName}">
                                     </option>
                                 </select>
                             </div>
+
                             <div class="d-flex gap-2">
                                 <button type="submit"
                                     class="btn btn-primary flex-fill gap-2 d-flex align-items-center justify-content-center">
@@ -79,8 +97,8 @@
                                         <td class="d-none d-md-table-cell">
                                             <span class="badge bg-info" th:text="${facility.mflCode}">12345</span>
                                         </td>
-                                        <td class="d-none d-lg-table-cell"
-                                            th:text="${facility.county?.countyName ?: 'Not Assigned'}">County</td>
+                                        <td class="d-none d-lg-table-cell" th:text="${facility.countyName}">Not Assigned
+                                        </td>
                                         <td>
                                             <div class="btn-box">
                                                 <button class="btn btn-sm btn-outline-primary"
@@ -112,29 +130,27 @@
             const csrfToken = /*[[${_csrf.token}]]*/ '';
             const csrfHeader = /*[[${_csrf.headerName}]]*/ '';
 
-            // Edit facility
+            // Edit facility - now works with DTO
+            // NEW - DYNAMIC CONTEXT PATH (WORKS EVERYWHERE)
             function editFacility(id) {
-                fetch(`/admin/facilities/get/${id}`)
-                    .then(response => response.json())
+                ajaxGet('admin/facilities/get/' + id)
                     .then(facility => {
-                        // Populate form fields
-                        document.getElementById('facilityName').value = facility.facilityName;
-                        document.getElementById('mflCode').value = facility.mflCode;
-                        document.getElementById('county').value = facility.county ? facility.county.id : '';
-
-                        // Set hidden ID field
+                        document.getElementById('facilityName').value = facility.facilityName || '';
+                        document.getElementById('mflCode').value = facility.mflCode || '';
+                        document.getElementById('county').value = facility.countyId || '';
                         document.getElementById('facilityId').value = facility.id;
 
-                        // Change button text and style
                         const btn = document.querySelector('#facilityForm button[type="submit"]');
                         document.getElementById('submitBtnText').textContent = 'Update Facility';
                         btn.classList.remove('btn-primary');
                         btn.classList.add('btn-warning');
 
-                        // Scroll to form
                         document.querySelector('.card').scrollIntoView({ behavior: 'smooth' });
                     })
-                    .catch(error => console.error('Error:', error));
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert('Error loading facility data');
+                    });
             }
 
             // Reset form to add mode
@@ -173,7 +189,7 @@
                         ]
                     });
 
-                    // Custom styling for DataTable elements to match main.js
+                    // Custom styling for DataTable elements
                     $('#facilitiesTable_filter input').addClass('form-control').attr("placeholder", "Search...").addClass('form-control-sm');
                     $('#facilitiesTable_length').find('select').addClass('form-control form-control-sm px-3');
                 }

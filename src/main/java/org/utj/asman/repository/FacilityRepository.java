@@ -1,46 +1,44 @@
 package org.utj.asman.repository;
 
-import org.utj.asman.model.Facility;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
+import org.utj.asman.model.Facility;
+
 import java.util.List;
 import java.util.Optional;
 
-/**
- * Repository interface for managing Facility entities (e.g., hospitals, health centers).
- * Extends JpaRepository to inherit standard CRUD operations.
- */
+@Repository
 public interface FacilityRepository extends JpaRepository<Facility, Long> {
 
     /**
-     * Finds a Facility by its unique MFL code.
-     * @param mflCode The unique Master Facility List code.
-     * @return An Optional containing the found Facility or empty if not found.
+     * Find facility by MFL code
+     * Used for validation to ensure MFL codes are unique
      */
     Optional<Facility> findByMflCode(String mflCode);
 
     /**
-     * Checks if a Facility with the given MFL code already exists.
-     * Used for ensuring uniqueness during creation or update.
-     * @param mflCode The Master Facility List code to check.
-     * @return True if a facility with this MFL code exists, false otherwise.
+     * Find all facilities by county ID
+     * Returns empty list if no facilities found
+     */
+    List<Facility> findByCountyId(Long countyId);
+
+    /**
+     * Check if a facility exists with the given MFL code
      */
     boolean existsByMflCode(String mflCode);
 
     /**
-     * Searches for facilities whose name contains the specified search term (case-insensitive).
-     * This is useful for lookup/auto-complete functionality in the user interface.
-     * @param searchTerm The partial name to search for.
-     * @return A list of matching Facilities.
+     * Count facilities by county ID
      */
-    List<Facility> findByFacilityNameContainingIgnoreCase(String searchTerm);
+    long countByCountyId(Long countyId);
 
     /**
-     * Searches for facilities based on a partial facility name or MFL code (for quick search).
-     * @param query The search term.
-     * @return A list of facilities matching the query.
+     * Find facilities by facility name containing search term (case insensitive)
      */
-    @Query("SELECT f FROM Facility f WHERE LOWER(f.facilityName) LIKE LOWER(CONCAT('%', :query, '%')) OR LOWER(f.mflCode) LIKE LOWER(CONCAT('%', :query, '%'))")
-    List<Facility> searchFacilities(@Param("query") String query);
+    List<Facility> findByFacilityNameContainingIgnoreCase(String facilityName);
+
+    /**
+     * Find facilities by MFL code containing search term (case insensitive)
+     */
+    List<Facility> findByMflCodeContainingIgnoreCase(String mflCode);
 }

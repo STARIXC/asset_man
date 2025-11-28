@@ -1066,9 +1066,24 @@ input[type=checkbox] {
   margin-bottom: 5px;
 }
 
+/* SweetAlert2 Container - Fix positioning */
+.swal2-container {
+  z-index: 10000 !important;
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  right: 0 !important;
+  bottom: 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
 .swal2-popup {
   background-color: #112143;
   padding: 15px;
+  position: relative !important;
+  margin: auto !important;
 }
 .swal2-popup .swal2-title {
   font-size: 20px;

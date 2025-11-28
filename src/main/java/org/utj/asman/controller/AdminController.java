@@ -172,4 +172,15 @@ public class AdminController {
         model.addAttribute("facilities", assetService.getAllFacilities());
         return "admin/asset_management";
     }
+
+        @PostMapping("/assets/delete/{id}")
+    @ResponseBody
+    public ResponseEntity<?> deleteAsset(@PathVariable Long id) {
+        try {
+            assetService.deleteAsset(id);
+            return ResponseEntity.ok().body("{\"message\": \"Asset deleted successfully\"}");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("{\"error\": \"" + e.getMessage() + "\"}");
+        }
+    }
 }

@@ -10,10 +10,9 @@ import java.util.Optional;
 
 @Service
 public class CpuSpecificationService {
-
+    @Autowired
     private final CpuSpecificationRepository cpuSpecificationRepository;
 
-    @Autowired
     public CpuSpecificationService(CpuSpecificationRepository cpuSpecificationRepository) {
         this.cpuSpecificationRepository = cpuSpecificationRepository;
     }

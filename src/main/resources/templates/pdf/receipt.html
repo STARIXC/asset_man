@@ -1,0 +1,307 @@
+<!DOCTYPE html
+    PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+    <title>Asset Receipt</title>
+
+    <style type="text/css">
+        @page {
+            size: A4;
+            margin-top: 10mm;
+            margin-bottom: 15mm;
+            margin-left: 20mm;
+            margin-right: 20mm;
+
+            @bottom-center {
+                content: "Page " counter(page) " of " counter(pages);
+                font-size: 10pt;
+                font-family: 'Times New Roman', serif;
+                color: #444444;
+            }
+        }
+
+        /* Compact Text Styles */
+        p {
+            margin-top: 4px;
+            margin-bottom: 4px;
+            line-height: 1.2;
+        }
+
+        .compact-text {
+            line-height: 1.1;
+            margin-top: 2px;
+            margin-bottom: 2px;
+        }
+
+        body {
+            font-family: "Times New Roman", serif;
+            font-size: 12pt;
+            line-height: 1.3;
+            /* Reduced from 1.6 */
+            margin: 0;
+            padding: 0;
+            color: #000000;
+        }
+
+        /* ============================
+           HEADER TABLE — UPDATED
+        ============================ */
+
+        .header-table {
+            width: 100%;
+            border-collapse: collapse;
+            table-layout: fixed;
+            margin-bottom: 12px;
+            border-bottom: 2px solid #333333;
+        }
+
+        .header-table td {
+            padding: 2px;
+            line-height: 1.2;
+            text-align: center;
+            vertical-align: middle;
+            border: none;
+        }
+
+        .logo-col-small {
+            width: 25%;
+        }
+
+        .logo-col-large {
+            width: 50%;
+        }
+
+        .logo-small {
+            max-height: 129px;
+            max-width: 100px;
+            width: auto;
+            height: 100px;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .logo-large {
+
+            width: auto;
+            height: 55px;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* ============================
+           CONTENT STYLES
+        ============================ */
+
+        .intro-text {
+            margin: 8px 0;
+            text-align: justify;
+            line-height: 1.3;
+        }
+
+        .title {
+            text-align: center;
+            font-size: 24pt;
+            font-weight: bold;
+            margin: 10px 0;
+            text-transform: uppercase;
+        }
+
+        .highlight {
+            font-weight: bold;
+        }
+
+        .blue-text {
+            color: #0066cc;
+            font-weight: bold;
+        }
+
+        .equipment-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 8px 0;
+        }
+
+        .equipment-table th,
+        .equipment-table td {
+            border: 1px solid #000000;
+            padding: 3px;
+            line-height: 1.2;
+            text-align: left;
+        }
+
+        .equipment-table th {
+            background-color: #f0f0f0;
+            font-weight: bold;
+        }
+
+        .conditions {
+            margin: 6px 0;
+        }
+
+        .conditions p {
+            margin-bottom: 3px;
+        }
+
+        .compact-list {
+            margin-left: 10px;
+            margin-top: 0;
+            line-height: 1.2;
+        }
+
+        .compact-list li {
+            margin-bottom: 2px;
+            font-size: 12pt;
+            padding: 0;
+        }
+
+
+
+        .signature-section {
+            margin-top: 15px;
+        }
+
+        .signature-header {
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .signature-line {
+            border-top: 1px solid #000000;
+            width: 260px;
+            margin-top: 6px;
+            margin-bottom: 6px;
+        }
+
+        .footer {
+            margin-top: 25px;
+            text-align: center;
+            font-style: italic;
+            color: #0066cc;
+            font-weight: bold;
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <table class="header-table">
+        <tr>
+            <td class="logo-col-small">
+                <img th:if="${receipt.logoMain != null and !receipt.logoMain.isEmpty()}" th:src="${receipt.logoMain}"
+                    alt="Main Logo" class="logo-small" />
+            </td>
+
+            <td class="logo-col-small">
+                <img th:if="${receipt.logoPartner1 != null and !receipt.logoPartner1.isEmpty()}"
+                    th:src="${receipt.logoPartner1}" alt="Partner Logo 1" class="logo-small" />
+            </td>
+
+            <td class="logo-col-large">
+                <img th:if="${receipt.logoPartner2 != null and !receipt.logoPartner2.isEmpty()}"
+                    th:src="${receipt.logoPartner2}" alt="Partner Logo 2" class="logo-large" />
+            </td>
+        </tr>
+    </table>
+
+    <div class="title">RECEIPT</div>
+
+    <div class="intro-text">
+        <span class="highlight" th:text="${receipt.orgName}">USAID Tujenge Jamii</span>
+        hereby provide to
+        <span class="blue-text"><span th:text="${receipt.facilityName}">Facility</span></span>
+        at
+        <span class="blue-text"><span th:text="${receipt.countyName}">County</span></span>
+        <span class="blue-text">, Kenya</span>,
+        the Recipient, the following computer equipment and accessories financed under the
+        <span class="highlight blue-text">USAID Tujenge Jamii Activity</span>.
+    </div>
+
+    <table class="equipment-table">
+        <thead>
+            <tr>
+                <th>Equipment</th>
+                <th>Serial Number</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            <tr th:each="equipment : ${receipt.equipmentList}">
+                <td th:text="${equipment.equipment}">CPU</td>
+                <td th:text="${equipment.serialNumber}">SERIAL123</td>
+            </tr>
+
+            <tr th:if="${receipt.equipmentList == null or receipt.equipmentList.isEmpty()}">
+                <td colspan="2" style="text-align:center; font-style:italic;">
+                    No equipment records found
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="conditions">
+        <p class="highlight">The Recipient accepts the above-described computer equipment and accessories and further
+            covenants that:</p>
+        <ol type="a" class="compact-list">
+            <li>It will use the equipment for purposes consistent with the objectives of the <span
+                    class="blue-text highlight">USAID Tujenge Jamii Activity</span>.</li>
+            <li>It will not sell the indicated equipment.</li>
+            <li>It will be responsible for security, loss and any damage.</li>
+            <li>The equipment will not be used for personal purposes.</li>
+            <li>It will return the equipment if it ceases operations or cannot comply with conditions.</li>
+            <li>The responsibility for correct usage lies with <span class="blue-text"
+                    th:text="${receipt.facilityName}">Facility</span>.</li>
+        </ol>
+    </div>
+
+
+    <div class="signature-section">
+
+        <p class="signature-header">
+            In signing below, the Recipient accepts the above-described computer equipment on the terms and conditions
+            set forth.
+        </p>
+
+        <p>
+            <span class="highlight">Sincerely,</span><br />
+            <span class="blue-text" th:text="${receipt.signatoryName}">Dr. Moses Kitheka</span><br />
+            <span class="highlight"><span th:text="${receipt.signatoryTitle}">Chief of Party</span>, <span
+                    class="blue-text" th:text="${receipt.signatoryOrganization}">USAID Tujenge Jamii</span></span>
+        </p>
+
+        <div style="border-top: 2px solid #000000; width: 100%; margin: 30px 0;"></div>
+
+        <p class="highlight">Recipient acknowledgement:</p>
+
+        <p>
+            For <span class="blue-text"><span th:text="${receipt.facilityName}">Facility</span></span>:
+        </p>
+
+        <table style="width:100%; border-collapse:collapse; margin-top:20px;">
+            <tr>
+                <td style="border:none; width:50%;">
+                    <div class="signature-line"></div>
+                    <p>Name and title</p>
+                </td>
+
+                <td style="border:none; width:50%;">
+                    <div class="signature-line"></div>
+                    <p>Date / Stamp</p>
+                </td>
+            </tr>
+        </table>
+
+    </div>
+
+    <div class="footer">
+        <p th:text="${receipt.orgName}">USAID Tujenge Jamii</p>
+    </div>
+
+</body>
+
+</html>

@@ -1,27 +1,72 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
+
 <head>
     <meta charset="UTF-8" />
     <style>
-        body { font-family: Arial, Helvetica, sans-serif; margin: 20px; }
-        h1 { text-align: center; }
-        .section { margin-top: 30px; }
-        .label { font-weight: bold; width: 200px; display: inline-block; }
-/* value styling placeholder */
-        .grid { display: flex; flex-wrap: wrap; }
-        .grid div { width: 45%; margin-right: 5%; margin-bottom: 10px; }
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            margin: 20px;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        .section {
+            margin-top: 30px;
+        }
+
+        .label {
+            font-weight: bold;
+            width: 200px;
+            display: inline-block;
+        }
+
+        /* value styling placeholder */
+        .grid {
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        .grid div {
+            width: 45%;
+            margin-right: 5%;
+            margin-bottom: 10px;
+        }
     </style>
 </head>
+
 <body>
-    <h1>USAID Tujenge Jamii</h1>
+    <div style="width: 100%; margin-bottom: 20px;">
+        <table style="width: 100%; border: none;">
+            <tr>
+                <td style="text-align: left; width: 33%; vertical-align: middle;">
+                    <img th:if="${settings['logo_main']}" th:src="${uploadDir + settings['logo_main']}"
+                        style="height: 60px; max-width: 150px;" />
+                </td>
+                <td style="text-align: center; width: 33%; vertical-align: middle;">
+                    <img th:if="${settings['logo_partner1']}" th:src="${uploadDir + settings['logo_partner1']}"
+                        style="height: 60px; max-width: 150px;" />
+                </td>
+                <td style="text-align: right; width: 33%; vertical-align: middle;">
+                    <img th:if="${settings['logo_partner2']}" th:src="${uploadDir + settings['logo_partner2']}"
+                        style="height: 60px; max-width: 150px;" />
+                </td>
+            </tr>
+        </table>
+    </div>
+    <h1 th:text="${settings['org_name'] ?: 'USAID Tujenge Jamii'}">USAID Tujenge Jamii</h1>
     <h2>COMPUTER ASSIGNMENT FORM</h2>
 
     <div class="section">
         <h3>COMPUTER DETAILS AND SPECS:</h3>
         <div class="grid">
             <div><span class="label">ASSET TAG</span> <span class="value" th:text="${facility.id}">N/A</span></div>
-            <div><span class="label">SERIAL NO.</span> <span class="value" th:text="${facility.mflCode}">6LP3SJ3</span></div>
-            <div><span class="label">MODEL</span> <span class="value" th:text="${facility.facilityName}">OptiPlex 5090</span></div>
+            <div><span class="label">SERIAL NO.</span> <span class="value" th:text="${facility.mflCode}">6LP3SJ3</span>
+            </div>
+            <div><span class="label">MODEL</span> <span class="value" th:text="${facility.facilityName}">OptiPlex
+                    5090</span></div>
             <div><span class="label">MANUFACTURER</span> <span class="value">Dell</span></div>
             <div><span class="label">PROCESSOR</span> <span class="value">Intel® Core™ i5 10Th Gen</span></div>
             <div><span class="label">MEMORY</span> <span class="value">8.00 GB</span></div>
@@ -30,14 +75,17 @@
             <div><span class="label">MONITOR SERIAL NO.</span> <span class="value"></span></div>
             <div><span class="label">UPS SERIAL NO.</span> <span class="value"></span></div>
             <div><span class="label">COMPUTER SUPPLIER</span> <span class="value">Fashtech Computers Ltd.</span></div>
-            <div><span class="label">PURCHASE DATE</span> <span class="value" th:text="${#dates.format(facility.createdAt, 'dd/MM/yyyy')}">23/07/2023</span></div>
+            <div><span class="label">PURCHASE DATE</span> <span class="value"
+                    th:text="${#dates.format(facility.createdAt, 'dd/MM/yyyy')}">23/07/2023</span></div>
         </div>
     </div>
 
     <div class="section">
         <h3>ASSIGNED TO:</h3>
         <div class="grid">
-            <div><span class="label">NAME</span> <span class="value" th:text="${facility.county != null ? facility.county.countyName : ''}">Bahati Sub-county Hospital</span></div>
+            <div><span class="label">NAME</span> <span class="value"
+                    th:text="${facility.county != null ? facility.county.countyName : ''}">Bahati Sub-county
+                    Hospital</span></div>
             <div><span class="label">DESIGNATION</span> <span class="value"></span></div>
             <div><span class="label">PROJECT</span> <span class="value">USAID Tujenge Jamii.</span></div>
             <div><span class="label">SIGNATURE</span> <span class="value"></span></div>
@@ -55,4 +103,5 @@
         </div>
     </div>
 </body>
+
 </html>

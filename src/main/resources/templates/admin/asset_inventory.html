@@ -1,10 +1,11 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{admin/layout}">
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{admin/layout}">
+
 <head>
     <title>Asset List</title>
 </head>
+
 <body>
     <div layout:fragment="header">Asset Inventory</div>
 
@@ -26,12 +27,12 @@
                         <form id="filterForm" method="get" class="row g-3">
                             <div class="col-12">
                                 <label for="facilityFilter" class="form-label">Facility</label>
-                                <select class="form-select" id="facilityFilter" name="facilityId" onchange="this.form.submit()">
+                                <select class="form-select" id="facilityFilter" name="facilityId"
+                                    onchange="this.form.submit()">
                                     <option value="">All Facilities</option>
-                                    <option th:each="facility : ${facilities}"
-                                            th:value="${facility.id}"
-                                            th:text="${facility.facilityName}"
-                                            th:selected="${param.facilityId != null && param.facilityId[0] == facility.id.toString()}">
+                                    <option th:each="facility : ${facilities}" th:value="${facility.id}"
+                                        th:text="${facility.facilityName}"
+                                        th:selected="${param.facilityId != null && param.facilityId[0] == facility.id.toString()}">
                                     </option>
                                 </select>
                             </div>
@@ -74,24 +75,39 @@
                                 </td>
                                 <td>
                                     <span th:if="${asset.monitorModel}" th:text="${asset.monitorModel}"></span>
-                                    <small th:if="${asset.monitorSerial}" class="d-block text-muted" th:text="${asset.monitorSerial}"></small>
+                                    <small th:if="${asset.monitorSerial}" class="d-block text-muted"
+                                        th:text="${asset.monitorSerial}"></small>
                                 </td>
                                 <td>
                                     <span th:if="${asset.upsModel}" th:text="${asset.upsModel}"></span>
-                                    <small th:if="${asset.upsSerial}" class="d-block text-muted" th:text="${asset.upsSerial}"></small>
+                                    <small th:if="${asset.upsSerial}" class="d-block text-muted"
+                                        th:text="${asset.upsSerial}"></small>
                                 </td>
                                 <td>
                                     <div class="btn-group">
-                                        <a th:href="@{/assets/edit/{id}(id=${asset.id})}" 
-                                           class="btn btn-sm btn-outline-primary">
-                                            <i class="fa-solid fa-pen-to-square"></i>
+                                        <!-- For Receipt -->
+                                        <a th:href="@{/admin/pdf/receipt/{id}(id=${facility.id})}"
+                                            class="btn btn-primary" target="_blank">
+                                            <i class="fa fa-file-pdf"></i> Download Receipt
                                         </a>
-                                        <button type="button" 
-                                                class="btn btn-sm btn-outline-danger"
-                                                th:data-id="${asset.id}"
-                                                onclick="confirmDelete(this.getAttribute('data-id'))">
-                                            <i class="fa-solid fa-trash"></i>
-                                        </button>
+
+                                        <!-- For Assignment Form -->
+                                        <a th:href="@{/admin/pdf/assignment/{id}(id=${asset.id})}"
+                                            class="btn btn-primary" target="_blank">
+                                            <i class="fa fa-file-pdf"></i> Download Assignment Form
+                                        </a>
+
+                                        <!-- For Bulk Assignment Forms -->
+                                        <a th:href="@{/admin/pdf/assignment/facility/{id}(id=${facility.id})}"
+                                            class="btn btn-success" target="_blank">
+                                            <i class="fa fa-file-pdf"></i> Download All Assignment Forms
+                                        </a>
+
+                                        <!-- For Preview -->
+                                        <a th:href="@{/admin/pdf/receipt/{id}/preview(id=${facility.id})}"
+                                            class="btn btn-info" target="_blank">
+                                            <i class="fa fa-eye"></i> Preview Receipt
+                                        </a>
                                     </div>
                                 </td>
                             </tr>
@@ -105,7 +121,7 @@
     <!-- Page level scripts -->
     <th:block layout:fragment="scripts">
         <script>
-            $(document).ready(function() {
+            $(document).ready(function () {
                 $('#assetsTable').DataTable({
                     "order": [[1, "asc"]],
                     "pageLength": 25
@@ -127,37 +143,27 @@
                     }
                 });
             }
-
             function deleteAsset(assetId) {
-                fetch(`/api/assets/${assetId}`, {
-                    method: 'DELETE',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'X-CSRF-TOKEN': document.querySelector('meta[name="_csrf"]').content
-                    }
-                })
-                .then(response => {
-                    if (response.ok) {
+                ajaxDelete('api/assets/' + assetId)
+                    .then(() => {
                         Swal.fire(
                             'Deleted!',
                             'Asset has been deleted.',
                             'success'
                         ).then(() => {
-                            globalThis.location.reload();
+                            window.location.reload();
                         });
-                    } else {
-                        throw new Error('Failed to delete');
-                    }
-                })
-                .catch(error => {
-                    Swal.fire(
-                        'Error!',
-                        'Failed to delete the asset.',
-                        'error'
-                    );
-                });
+                    })
+                    .catch(error => {
+                        Swal.fire(
+                            'Error!',
+                            'Failed to delete the asset.',
+                            'error'
+                        );
+                    });
             }
         </script>
     </th:block>
 </body>
+
 </html>

@@ -1,6 +1,58 @@
 (function($) {
     'use strict';
+    
+    /**
+     * Check if required libraries are loaded
+     */
+    function checkDependencies() {
+        const dependencies = {
+            jQuery: typeof $ !== 'undefined',
+            ApexCharts: typeof ApexCharts !== 'undefined',
+            moment: typeof moment !== 'undefined'
+        };
+        
+        const missing = Object.keys(dependencies).filter(key => !dependencies[key]);
+        
+        if (missing.length > 0) {
+            console.error('Missing required libraries:', missing.join(', '));
+            return false;
+        }
+        
+        return true;
+    }
+    
+    /**
+     * Safely render ApexCharts
+     */
+    function renderApexChart(selector, options) {
+        try {
+            const element = document.querySelector(selector);
+            if (!element) {
+                console.warn(`Chart element not found: ${selector}`);
+                return null;
+            }
+            
+            if (typeof ApexCharts === 'undefined') {
+                console.error('ApexCharts is not loaded');
+                return null;
+            }
+            
+            const chart = new ApexCharts(element, options);
+            chart.render();
+            return chart;
+        } catch (error) {
+            console.error(`Failed to render chart ${selector}:`, error);
+            return null;
+        }
+    }
+    
     $(document).ready(function() {
+        // Check dependencies before initializing
+        if (!checkDependencies()) {
+            console.warn('Skipping dashboard initialization due to missing dependencies');
+            return;
+        }
+        
         //------------------------------------------------------------------------------------------------------------------
         // Sales Analytics Chart
         //------------------------------------------------------------------------------------------------------------------
@@ -32,7 +84,15 @@
                 xaxis: {
                     fill: '#FFFFFF',
                     type: 'datetime',
-                    categories: ["2022-12-19T00:00:00.000Z", "2022-12-20T00:00:00.000Z", "2022-12-21T00:00:00.000Z", "2022-12-22T00:00:00.000Z", "2022-12-23T00:00:00.000Z", "2022-12-24T00:00:00.000Z", "2022-12-25T00:00:00.000Z"],
+                    categories: [
+                        "2022-12-19T00:00:00.000Z", 
+                        "2022-12-20T00:00:00.000Z", 
+                        "2022-12-21T00:00:00.000Z", 
+                        "2022-12-22T00:00:00.000Z", 
+                        "2022-12-23T00:00:00.000Z", 
+                        "2022-12-24T00:00:00.000Z", 
+                        "2022-12-25T00:00:00.000Z"
+                    ],
                     labels: {
                         format: 'dddd',
                     },
@@ -64,9 +124,13 @@
                     },
                 }]
             };
-            var saleAnalytics = new ApexCharts(document.querySelector("#saleAnalytics"), saleAnalyticsoptions);
-            saleAnalytics.render();
+            
+            renderApexChart("#saleAnalytics", saleAnalyticsoptions);
         }
+        
+        //------------------------------------------------------------------------------------------------------------------
+        // Balance Overview Chart
+        //------------------------------------------------------------------------------------------------------------------
         if($('#balanceOverview').length) {
             var balanceOverviewoptions = {
                 series: [{
@@ -96,7 +160,20 @@
                 xaxis: {
                     fill: '#FFFFFF',
                     type: 'datetime',
-                    categories: ["2022-12-19T00:00:00.000Z", "2022-12-20T00:00:00.000Z", "2022-12-21T00:00:00.000Z", "2022-12-22T00:00:00.000Z", "2022-12-23T00:00:00.000Z", "2022-12-24T00:00:00.000Z", "2022-12-25T00:00:00.000Z", "2022-12-26T00:00:00.000Z", "2022-12-27T00:00:00.000Z", "2022-12-28T00:00:00.000Z", "2022-12-29T00:00:00.000Z", "2022-12-30T00:00:00.000Z"],
+                    categories: [
+                        "2022-12-19T00:00:00.000Z", 
+                        "2022-12-20T00:00:00.000Z", 
+                        "2022-12-21T00:00:00.000Z", 
+                        "2022-12-22T00:00:00.000Z", 
+                        "2022-12-23T00:00:00.000Z", 
+                        "2022-12-24T00:00:00.000Z", 
+                        "2022-12-25T00:00:00.000Z", 
+                        "2022-12-26T00:00:00.000Z", 
+                        "2022-12-27T00:00:00.000Z", 
+                        "2022-12-28T00:00:00.000Z", 
+                        "2022-12-29T00:00:00.000Z", 
+                        "2022-12-30T00:00:00.000Z"
+                    ],
                     labels: {
                         datetimeFormatter: {
                             month: 'MMMM',
@@ -144,9 +221,13 @@
                     },
                 }]
             };
-            var balanceOverview = new ApexCharts(document.querySelector("#balanceOverview"), balanceOverviewoptions);
-            balanceOverview.render();
+            
+            renderApexChart("#balanceOverview", balanceOverviewoptions);
         }
+        
+        //------------------------------------------------------------------------------------------------------------------
+        // Audience Overview Chart
+        //------------------------------------------------------------------------------------------------------------------
         if($('#audienceOverview').length) {
             var audienceOverviewoptions = {
                 series: [{
@@ -180,7 +261,20 @@
                 xaxis: {
                     fill: '#FFFFFF',
                     type: 'datetime',
-                    categories: ["2022-12-19T00:00:00.000Z", "2022-12-20T00:00:00.000Z", "2022-12-21T00:00:00.000Z", "2022-12-22T00:00:00.000Z", "2022-12-23T00:00:00.000Z", "2022-12-24T00:00:00.000Z", "2022-12-25T00:00:00.000Z", "2022-12-26T00:00:00.000Z", "2022-12-27T00:00:00.000Z", "2022-12-28T00:00:00.000Z", "2022-12-29T00:00:00.000Z", "2022-12-30T00:00:00.000Z"],
+                    categories: [
+                        "2022-12-19T00:00:00.000Z", 
+                        "2022-12-20T00:00:00.000Z", 
+                        "2022-12-21T00:00:00.000Z", 
+                        "2022-12-22T00:00:00.000Z", 
+                        "2022-12-23T00:00:00.000Z", 
+                        "2022-12-24T00:00:00.000Z", 
+                        "2022-12-25T00:00:00.000Z", 
+                        "2022-12-26T00:00:00.000Z", 
+                        "2022-12-27T00:00:00.000Z", 
+                        "2022-12-28T00:00:00.000Z", 
+                        "2022-12-29T00:00:00.000Z", 
+                        "2022-12-30T00:00:00.000Z"
+                    ],
                     labels: {
                         datetimeFormatter: {
                             month: 'MMMM',
@@ -228,48 +322,51 @@
                     },
                 }]
             };
-            var audienceOverview = new ApexCharts(document.querySelector("#audienceOverview"), audienceOverviewoptions);
-            audienceOverview.render();
+            
+            renderApexChart("#audienceOverview", audienceOverviewoptions);
         }
-
-
-
         
         //------------------------------------------------------------------------------------------------------------------
         // Dashboard Breadcrumb Date Picker
         //------------------------------------------------------------------------------------------------------------------
-        $('#dashboardFilter').daterangepicker({
-            ranges: {
-                'Today': [moment(), moment()],
-                'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
-                'Last 7 Days': [moment().subtract(6, 'days'), moment()],
-                'Last 30 Days': [moment().subtract(29, 'days'), moment()],
-                'This Month': [moment().startOf('month'), moment().endOf('month')],
-                'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
-            },
-            opens:'left',
-        });
-
-
-
+        if ($('#dashboardFilter').length && typeof moment !== 'undefined') {
+            $('#dashboardFilter').daterangepicker({
+                ranges: {
+                    'Today': [moment(), moment()],
+                    'Yesterday': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+                    'Last 7 Days': [moment().subtract(6, 'days'), moment()],
+                    'Last 30 Days': [moment().subtract(29, 'days'), moment()],
+                    'This Month': [moment().startOf('month'), moment().endOf('month')],
+                    'Last Month': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')]
+                },
+                opens:'left',
+            });
+        }
+        
         //------------------------------------------------------------------------------------------------------------------
         // Recent Order Data Table
         //------------------------------------------------------------------------------------------------------------------
-        if($('#myTable').length) {
-            var dataTable = $('#myTable').DataTable({
-                dom: 'lfrtip',
-                responsive: true,
-                select: true,
-                scrollX: true,
-            });
-            $('#myTable_filter input').addClass('form-control').attr("placeholder", "Search...").addClass('form-control-sm');
-            $('.dataTables_length').hide();
-            $('.dataTables_filter').prependTo('#tableSearch');
-            $('.dataTables_info, .paging_simple_numbers').prependTo('.table-bottom-control');
-            $('#myTable tr').on('click', function () {
-                $(this).toggleClass('selected');
-                $(this).siblings().removeClass('selected');
-            })
+        if($('#myTable').length && typeof $.fn.DataTable !== 'undefined') {
+            try {
+                var dataTable = $('#myTable').DataTable({
+                    dom: 'lfrtip',
+                    responsive: true,
+                    select: true,
+                    scrollX: true,
+                });
+                
+                $('#myTable_filter input').addClass('form-control').attr("placeholder", "Search...").addClass('form-control-sm');
+                $('.dataTables_length').hide();
+                $('.dataTables_filter').prependTo('#tableSearch');
+                $('.dataTables_info, .paging_simple_numbers').prependTo('.table-bottom-control');
+                
+                $('#myTable tr').on('click', function () {
+                    $(this).toggleClass('selected');
+                    $(this).siblings().removeClass('selected');
+                });
+            } catch (error) {
+                console.error('Failed to initialize DataTable:', error);
+            }
         }
     });
 })(jQuery);

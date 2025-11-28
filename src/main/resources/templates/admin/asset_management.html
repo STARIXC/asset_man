@@ -1,7 +1,7 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org"
-      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{admin/layout}">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{admin/layout}">
+
 <head>
     <title>Asset Management</title>
     <th:block layout:fragment="styles">
@@ -10,167 +10,274 @@
         <link rel="stylesheet" th:href="@{/assets/vendor/css/jquery-ui.min.css}">
     </th:block>
 </head>
+
 <body>
 
 
 
-<div layout:fragment="actions">
-    <a th:href="@{/admin/assets/new}" class="btn btn-sm btn-primary gap-2 d-flex align-items-center">
-        <i class="fa-solid fa-plus"></i> Add New Asset
-    </a>
-</div>
+    <div layout:fragment="actions">
+        <a th:href="@{/admin/assets/new}" class="btn btn-sm btn-primary gap-2 d-flex align-items-center">
+            <i class="fa-solid fa-plus"></i> Add New Asset
+        </a>
+    </div>
 
-<div layout:fragment="content">
-    <div class="row">
+    <div layout:fragment="content">
+        <div class="row">
 
-        <div class="col-12">
-            <div class="card">
-                <div class="card-header">
-                    Asset Inventory
-                </div>
-                <div class="card-body">
-                    <div class="table-filter-option">
-                        <div class="row g-3">
-                            <div class="col-xl-9 col-md-8">
-                                <div class="row g-3">
-                                    <div class="col">
-                                        <form id="filterForm" th:action="@{/admin/assets}" method="get" class="row g-2 g-md-3 align-items-end">
-                                            <div class="col-12 col-md-6 col-lg-4">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        Asset Inventory
+                    </div>
+                    <div class="card-body">
+                        <div class="table-filter-option">
+                            <div class="row g-3">
+                                <div class="col-xl-9 col-md-8">
+                                    <div class="row g-3">
+                                        <div class="col">
+                                            <form id="filterForm" th:action="@{/admin/assets}" method="get"
+                                                class="row g-2 g-md-3 align-items-end">
+                                                <div class="col-12 col-md-6 col-lg-4">
                                                     <select class="form-select" id="facilityFilter" name="facilityId">
-                                                    <option value="">All Facilities</option>
-                                                    <option th:each="facility : ${facilities}"
-                                                            th:value="${facility.id}"
-                                                            th:text="${facility.facilityName}"
+                                                        <option value="">All Facilities</option>
+                                                        <option th:each="facility : ${facilities}"
+                                                            th:value="${facility.id}" th:text="${facility.facilityName}"
                                                             th:selected="${currentFacility != null and currentFacility.id == facility.id}">
-                                                    </option>
-                                                </select>
-                                            </div>
-                                            <div class="col">
-                                                <button class="btn btn-sm btn-primary gap-2 d-flex align-items-center justify-content-center"><i class="fa-solid fa-filter"></i> Filter</button>
-                                            </div>
-                                        </form>
+                                                        </option>
+                                                    </select>
+                                                </div>
+                                                <div class="col">
+                                                    <button
+                                                        class="btn btn-sm btn-primary gap-2 d-flex align-items-center justify-content-center"><i
+                                                            class="fa-solid fa-filter"></i> Filter</button>
+                                                </div>
+                                            </form>
+                                        </div>
+
+
                                     </div>
-
-
+                                </div>
+                                <div class="col-xl-3 col-md-4 d-flex justify-content-between">
+                                    <div id="tableSearch"></div>
+                                    <div id="productTableLength"></div>
                                 </div>
                             </div>
-                            <div class="col-xl-3 col-md-4 d-flex justify-content-between">
-                                <div id="tableSearch"></div>
-                                <div id="productTableLength"></div>
-                            </div>
                         </div>
-                    </div>
-                    <div class="table-responsive">
-                        <table class="table table-dashed table-hover utj-dataTable all-product-table table-striped" id="allProductTable">
-                            <thead>
-                            <tr>
-                                <th class="no-sort">
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox" id="markAllProduct">
-                                    </div>
-                                </th>
-                                <th>Facility</th>
-                                <th class="d-none d-sm-table-cell">CPU Serial</th>
-                                <th class="d-none d-lg-table-cell">CPU Model</th>
-                                <th class="d-none d-lg-table-cell">Specs</th>
-                                <th class="d-none d-md-table-cell">Monitor</th>
-                                <th class="d-none d-lg-table-cell">UPS</th>
-                                <th>Actions</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr th:each="asset : ${assets}">
-                                <td>
-                                    <div class="form-check">
-                                        <input class="form-check-input" type="checkbox">
-                                    </div>
-                                </td>
-                                <td th:text="${asset.facility?.facilityName}"></td>
-                                <td class="d-none d-sm-table-cell" th:text="${asset.cpuSerial}"></td>
-                                <td class="d-none d-lg-table-cell"><span th:text="${asset.cpuSpecification?.model}"></span></td>
-                                <td class="d-none d-lg-table-cell">
-                                    <span th:if="${asset.cpuSpecification}" th:text="${asset.cpuSpecification.processor}"></span><br>
-                                    <small th:if="${asset.cpuSpecification}" class="text-muted">
-                                        RAM: <span th:text="${asset.cpuSpecification.memory}"></span>
-                                    </small>
-                                </td>
-                                <td class="d-none d-md-table-cell">
-                                    <span th:if="${asset.monitorModel}" th:text="${asset.monitorModel}"></span>
-                                    <small th:if="${asset.monitorSerial}" class="d-block text-muted" th:text="${asset.monitorSerial}"></small>
-                                </td>
-                                <td class="d-none d-lg-table-cell">
-                                    <span th:if="${asset.upsModel}" th:text="${asset.upsModel}"></span>
-                                </td>
-                                <td>
-                                    <div class="btn-group btn-group-sm flex-wrap gap-1">
-                                        <a th:href="@{/admin/assets/edit/{id}(id=${asset.id})}" class="btn btn-sm btn-outline-primary">
-                                            <i class="fa-solid fa-pen-to-square"></i>
-                                        </a>
-                                        <button type="button" class="btn btn-sm btn-outline-danger" th:data-id="${asset.id}"
-                                                onclick="confirmDelete(this.getAttribute('data-id'))">
-                                            <i class="fa-solid fa-trash"></i>
-                                        </button>
-                                    </div>
-                                </td>
-                            </tr>
+                        <div class="table-responsive">
+                            <table class="table table-dashed table-hover utj-dataTable all-product-table table-striped"
+                                id="allProductTable">
+                                <thead>
+                                    <tr>
+                                        <th class="no-sort">
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox" id="markAllProduct">
+                                            </div>
+                                        </th>
+                                        <th>Facility</th>
+                                        <th class="d-none d-sm-table-cell">CPU Serial</th>
+                                        <th class="d-none d-lg-table-cell">CPU Model</th>
+                                        <th class="d-none d-lg-table-cell">Specs</th>
+                                        <th class="d-none d-md-table-cell">Monitor</th>
+                                        <th class="d-none d-lg-table-cell">UPS</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr th:each="asset : ${assets}">
+                                        <td>
+                                            <div class="form-check">
+                                                <input class="form-check-input" type="checkbox">
+                                            </div>
+                                        </td>
+                                        <td th:text="${asset.facility?.facilityName}"></td>
+                                        <td class="d-none d-sm-table-cell" th:text="${asset.cpuSerial}"></td>
+                                        <td class="d-none d-lg-table-cell"><span
+                                                th:text="${asset.cpuSpecification?.model}"></span></td>
+                                        <td class="d-none d-lg-table-cell">
+                                            <span th:if="${asset.cpuSpecification}"
+                                                th:text="${asset.cpuSpecification.processor}"></span><br>
+                                            <small th:if="${asset.cpuSpecification}" class="text-muted">
+                                                RAM: <span th:text="${asset.cpuSpecification.memory}"></span>
+                                            </small>
+                                        </td>
+                                        <td class="d-none d-md-table-cell">
+                                            <span th:if="${asset.monitorModel}" th:text="${asset.monitorModel}"></span>
+                                            <small th:if="${asset.monitorSerial}" class="d-block text-muted"
+                                                th:text="${asset.monitorSerial}"></small>
+                                        </td>
+                                        <td class="d-none d-lg-table-cell">
+                                            <span th:if="${asset.upsModel}" th:text="${asset.upsModel}"></span>
+                                        </td>
+                                        <td>
+                                            <div class="btn-group gap-1">
+                                                <!--                                        <a th:href="@{/admin/assets/edit/{id}(id=${asset.id})}" class="btn btn-sm btn-outline-primary">-->
+                                                <!--                                            <i class="fa-solid fa-pen-to-square"></i>-->
+                                                <!--                                        </a>-->
+                                                <button type="button" class="btn btn-sm btn-outline-danger"
+                                                    th:data-id="${asset.id}"
+                                                    onclick="confirmDelete(this.getAttribute('data-id'))">
+                                                    <i class="fa-solid fa-trash"></i>
+                                                </button>
+                                                <!-- For Receipt -->
+                                                <a th:href="@{/admin/pdf/receipt/{id}(id=${asset.facility?.id})}"
+                                                    class="btn btn-primary btn-sm text-white text-decoration-none"
+                                                    target="_blank">
+                                                    <i class="fa fa-file-pdf"></i> Receipt
+                                                </a>
 
-                            </tbody>
-                        </table>
-                        <div class="table-bottom-control"></div>
-                    </div>
+                                                <!-- For Assignment Form -->
+                                                <a th:href="@{/admin/pdf/assignment/{id}(id=${asset.id})}"
+                                                    class="btn btn-success btn-sm text-white text-decoration-none"
+                                                    target="_blank">
+                                                    <i class="fa fa-file-pdf"></i> Assignment Form
+                                                </a>
 
+                                                <!--                                        &lt;!&ndash; For Bulk Assignment Forms &ndash;&gt;-->
+                                                <!--                                        <a th:href="@{/admin/pdf/assignment/facility/{id}(id=${asset.facility?.id})}"-->
+                                                <!--                                           class="btn btn-success btn-sm" target="_blank">-->
+                                                <!--                                            <i class="fa fa-file-pdf"></i> Download All Assignment Forms-->
+                                                <!--                                        </a>-->
+
+                                                <!-- For Preview -->
+                                                <a th:href="@{/admin/pdf/receipt/{id}/preview(id=${asset.facility?.id})}"
+                                                    class="btn btn-info btn-sm text-white text-decoration-none link-light"
+                                                    target="_blank">
+                                                    <i class="fa fa-eye"></i> Preview
+                                                </a>
+                                            </div>
+                                        </td>
+                                    </tr>
+
+                                </tbody>
+                            </table>
+                            <div class="table-bottom-control"></div>
+                        </div>
+
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
 
-<th:block layout:fragment="scripts">
-<!--    <script th:src="@{/assets/vendor/js/jquery.dataTables.min.js}"></script>-->
-    <script>
-        $(document).ready(function() {
-            // $('#assetsTable').DataTable({
-            //
-            // });
-        });
+    <th:block layout:fragment="scripts">
+        <!--    <script th:src="@{/assets/vendor/js/jquery.dataTables.min.js}"></script>-->
+        <script>
+            // Updated script section for asset_management.html
+            $(document).ready(function () {
+                // Initialize DataTable if needed
+                // $('#assetsTable').DataTable({});
+            });
 
-        function confirmDelete(assetId) {
-            const csrfToken = document.querySelector('meta[name="_csrf"]').content;
-            const csrfHeader = document.querySelector('meta[name="_csrf_header"]').content;
-
-            Swal.fire({
-                title: 'Are you sure?',
-                text: "You won't be able to revert this!",
-                icon: 'warning',
-                showCancelButton: true,
-                confirmButtonColor: '#3085d6',
-                cancelButtonColor: '#d33',
-                confirmButtonText: 'Yes, delete it!'
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    fetch(`/admin/assets/delete/${assetId}`, {
-                        method: 'POST', // Using POST for delete with CSRF
-                        headers: {
-                            [csrfHeader]: csrfToken
-                        }
-                    }).then(response => {
-                        if (response.ok) {
-                             Swal.fire(
-                                'Deleted!',
-                                'Asset has been deleted.',
-                                'success'
-                            ).then(() => {
-                                window.location.reload();
-                            });
-                        } else {
-                           Swal.fire('Error!', 'Something went wrong.', 'error');
-                        }
+            /**
+             * Confirm and delete asset
+             * @param {string|number} assetId - The ID of the asset to delete
+             */
+            function confirmDelete(assetId) {
+                // Validate asset ID
+                if (!assetId || assetId === 'null' || assetId === 'undefined') {
+                    console.error('Invalid asset ID:', assetId);
+                    Swal.fire({
+                        title: 'Error!',
+                        text: 'Invalid asset ID',
+                        icon: 'error',
+                        confirmButtonText: 'OK',
+                        confirmButtonClass: 'btn btn-primary',
+                        buttonsStyling: false
                     });
+                    return;
                 }
-            })
-        }
-    </script>
-</th:block>
+
+                Swal.fire({
+                    title: 'Are you sure?',
+                    text: "You won't be able to revert this!",
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: 'Yes, delete it!',
+                    cancelButtonText: 'Cancel'
+                }).then((result) => {
+                    if (result.isConfirmed) {
+                        // Show loading state
+                        Swal.fire({
+                            title: 'Deleting...',
+                            text: 'Please wait',
+                            allowOutsideClick: false,
+                            allowEscapeKey: false,
+                            showConfirmButton: false,
+                            willOpen: () => {
+                                Swal.showLoading();
+                            }
+                        });
+
+                        // Build the delete URL
+                        const deleteUrl = AppUtils.buildUrl('admin/assets/delete/' + assetId);
+
+                        // Perform delete request
+                        fetch(deleteUrl, {
+                            method: 'POST',
+                            headers: {
+                                [AppUtils.getCsrfHeader()]: AppUtils.getCsrfToken(),
+                                'Content-Type': 'application/json'
+                            },
+                            credentials: 'same-origin'
+                        })
+                            .then(response => {
+                                if (response.ok) {
+                                    // Success - check if response has content
+                                    const contentType = response.headers.get('content-type');
+                                    if (contentType && contentType.includes('application/json')) {
+                                        return response.json().then(data => ({ success: true, data }));
+                                    }
+                                    return { success: true };
+                                } else {
+                                    // Error response
+                                    return response.json()
+                                        .catch(() => ({ message: 'Failed to delete asset' }))
+                                        .then(data => {
+                                            throw new Error(data.message || `HTTP ${response.status}: ${response.statusText}`);
+                                        });
+                                }
+                            })
+                            .then(result => {
+                                // Success
+                                Swal.fire({
+                                    title: 'Deleted!',
+                                    text: 'Asset has been deleted successfully.',
+                                    icon: 'success',
+                                    confirmButtonText: 'OK',
+                                    confirmButtonClass: 'btn btn-primary',
+                                    buttonsStyling: false
+                                }).then(() => {
+                                    // Reload the page to reflect changes
+                                    window.location.reload();
+                                });
+                            })
+                            .catch(error => {
+                                // Error handling
+                                console.error('Delete error:', error);
+                                Swal.fire({
+                                    title: 'Error!',
+                                    text: error.message || 'Something went wrong while deleting the asset.',
+                                    icon: 'error',
+                                    confirmButtonText: 'OK',
+                                    confirmButtonClass: 'btn btn-primary',
+                                    buttonsStyling: false
+                                });
+                            });
+                    }
+                });
+            }
+
+            // Optional: Add event delegation for dynamically loaded content
+            $(document).on('click', '[data-action="delete-asset"]', function (e) {
+                e.preventDefault();
+                const assetId = $(this).data('id');
+                confirmDelete(assetId);
+            });
+        </script>
+    </th:block>
 
 </body>
+
 </html>

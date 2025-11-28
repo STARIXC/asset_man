@@ -123,4 +123,11 @@ public class AssetService {
             throw new IllegalArgumentException("UPS Serial exists: " + request.getUpsSerial());
         }
     }
+
+    @Transactional
+    public void deleteAsset(Long id) {
+        AssetRecord record = assetRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Asset not found with ID: " + id));
+        assetRepository.delete(record);
+    }
 }

@@ -101,23 +101,17 @@
 
             // Edit county
             function editCounty(id) {
-                fetch(`/admin/counties/get/${id}`)
-                    .then(response => response.json())
+                ajaxGet('admin/counties/get/' + id)
                     .then(county => {
-                        // Populate form fields
                         document.getElementById('countyName').value = county.countyName;
                         document.getElementById('countyCode').value = county.countyCode;
-
-                        // Set hidden ID field
                         document.getElementById('countyId').value = county.id;
 
-                        // Change button text and style
                         const btn = document.querySelector('#countyForm button[type="submit"]');
                         document.getElementById('submitBtnText').textContent = 'Update County';
                         btn.classList.remove('btn-primary');
                         btn.classList.add('btn-warning');
 
-                        // Scroll to form
                         document.querySelector('.card').scrollIntoView({ behavior: 'smooth' });
                     })
                     .catch(error => console.error('Error:', error));

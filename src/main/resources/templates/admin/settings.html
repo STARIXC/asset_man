@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+    layout:decorate="~{admin/layout}">
+
+<head>
+    <title>System Settings</title>
+</head>
+
+<body>
+    <div layout:fragment="header">System Configuration</div>
+
+    <div layout:fragment="content">
+        <div class="row">
+            <div class="col-12">
+                <!-- Alert Messages -->
+                <div th:if="${success}" class="alert alert-success alert-dismissible fade show" role="alert">
+                    <i class="fa-solid fa-check-circle me-2"></i><span th:text="${success}"></span>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                <div th:if="${error}" class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <i class="fa-solid fa-exclamation-circle me-2"></i><span th:text="${error}"></span>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+
+                <div class="card border-0 shadow-sm">
+                    <div class="card-header bg-white">
+                        <ul class="nav nav-tabs card-header-tabs" id="settingsTabs" role="tablist">
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link active" id="general-tab" data-bs-toggle="tab"
+                                    data-bs-target="#general" type="button" role="tab">General Information</button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="logos-tab" data-bs-toggle="tab" data-bs-target="#logos"
+                                    type="button" role="tab">Logos & Branding</button>
+                            </li>
+                            <li class="nav-item" role="presentation">
+                                <button class="nav-link" id="advanced-tab" data-bs-toggle="tab"
+                                    data-bs-target="#advanced" type="button" role="tab">Advanced / Add New</button>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="card-body">
+                        <form th:action="@{/admin/settings/save}" method="post" enctype="multipart/form-data">
+                            <div class="tab-content" id="settingsTabsContent">
+
+                                <!-- General Settings Tab -->
+                                <div class="tab-pane fade show active" id="general" role="tabpanel">
+                                    <h5 class="card-title mb-4">Organization Details</h5>
+                                    <div class="row g-3">
+                                        <div class="col-md-6" th:each="setting : ${settings}"
+                                            th:if="${setting.type == 'text'}">
+                                            <label th:for="${setting.settingKey}" class="form-label"
+                                                th:text="${setting.label}">Label</label>
+                                            <input type="text" class="form-control" th:id="${setting.settingKey}"
+                                                th:name="${setting.settingKey}" th:value="${setting.value}">
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Logos Tab -->
+                                <div class="tab-pane fade" id="logos" role="tabpanel">
+                                    <h5 class="card-title mb-4">PDF Report Logos</h5>
+                                    <div class="row g-4">
+                                        <!-- Main Logo -->
+                                        <div class="col-md-4 text-center">
+                                            <div class="border p-3 rounded">
+                                                <label class="form-label fw-bold">Main Logo (Left)</label>
+                                                <div class="mb-3">
+                                                    <img th:src="${settings.?[settingKey=='logo_main'].isEmpty() ? '/assets/images/kenya_pepfarlogo.jpg' : '/uploads/' + settings.?[settingKey=='logo_main'][0].value}"
+                                                        class="img-fluid"
+                                                        style="max-height: 100px; object-fit: contain;" alt="Main Logo">
+                                                </div>
+                                                <input type="file" class="form-control" name="logo_main"
+                                                    accept="image/*">
+                                                <div class="form-text">Appears on top-left of PDF</div>
+                                            </div>
+                                        </div>
+                                        <!-- Partner Logo 1 -->
+                                        <div class="col-md-4 text-center">
+                                            <div class="border p-3 rounded">
+                                                <label class="form-label fw-bold">Partner Logo 1 (Center)</label>
+                                                <div class="mb-3">
+                                                    <img th:src="${settings.?[settingKey=='logo_partner1'].isEmpty() ? '/assets/images/download.jpeg' : '/uploads/' + settings.?[settingKey=='logo_partner1'][0].value}"
+                                                        class="img-fluid"
+                                                        style="max-height: 100px; object-fit: contain;"
+                                                        alt="Partner Logo 1">
+                                                </div>
+                                                <input type="file" class="form-control" name="logo_partner1"
+                                                    accept="image/*">
+                                                <div class="form-text">Appears on top-center of PDF</div>
+                                            </div>
+                                        </div>
+                                        <!-- Partner Logo 2 -->
+                                        <div class="col-md-4 text-center">
+                                            <div class="border p-3 rounded">
+                                                <label class="form-label fw-bold">Partner Logo 2 (Right)</label>
+                                                <div class="mb-3">
+                                                    <img th:src="${settings.?[settingKey=='logo_partner2'].isEmpty() ? '/assets/images/deloitte-logo-4.png' : '/uploads/' + settings.?[settingKey=='logo_partner2'][0].value}"
+                                                        class="img-fluid"
+                                                        style="max-height: 100px; object-fit: contain;"
+                                                        alt="Partner Logo 2">
+                                                </div>
+                                                <input type="file" class="form-control" name="logo_partner2"
+                                                    accept="image/*">
+                                                <div class="form-text">Appears on top-right of PDF</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Advanced Tab (Add New) -->
+                                <div class="tab-pane fade" id="advanced" role="tabpanel">
+                                    <div class="alert alert-info">
+                                        <i class="fa-solid fa-info-circle"></i> Use this section to add new dynamic
+                                        configuration keys that can be used in the system.
+                                    </div>
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered">
+                                            <thead class="table-light">
+                                                <tr>
+                                                    <th>Key (Internal Name)</th>
+                                                    <th>Label (Display Name)</th>
+                                                    <th>Current Value</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                <tr th:each="setting : ${settings}">
+                                                    <td th:text="${setting.settingKey}">key</td>
+                                                    <td th:text="${setting.label}">label</td>
+                                                    <td th:text="${setting.value}">value</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <hr>
+                                    <h6>Add New Setting</h6>
+                                    <div class="row g-3 align-items-end">
+                                        <div class="col-md-3">
+                                            <label class="form-label">Key (e.g., report_footer)</label>
+                                            <input type="text" class="form-control" form="addSettingForm" name="key"
+                                                required>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <label class="form-label">Label (e.g., Report Footer Text)</label>
+                                            <input type="text" class="form-control" form="addSettingForm" name="label"
+                                                required>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <label class="form-label">Value</label>
+                                            <input type="text" class="form-control" form="addSettingForm" name="value"
+                                                required>
+                                        </div>
+                                        <div class="col-md-2">
+                                            <button type="submit" form="addSettingForm" class="btn btn-success w-100">
+                                                <i class="fa-solid fa-plus"></i> Add
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mt-4 pt-3 border-top">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="fa-solid fa-save"></i> Save Changes
+                                </button>
+                            </div>
+                        </form>
+
+                        <!-- Separate form for adding new settings to avoid conflict with main save -->
+                        <form id="addSettingForm" th:action="@{/admin/settings/add}" method="post"
+                            style="display: none;"></form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <th:block layout:fragment="scripts">
+        <script>
+            // Any specific scripts for settings page
+        </script>
+    </th:block>
+
+</body>
+
+</html>
